@@ -2,58 +2,78 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //elementos del dom
-var botonBasico = document.getElementById("botonBasico");
-var botonAvanzado = document.getElementById("botonAvanzado");
-var formularioBasico = document.getElementById("formularioBasico");
+var botonClasico = document.getElementById("botonClasico");
+var botonAventura = document.getElementById("botonAventura");
 var selectTema = document.getElementById("selectTema");
-var divMensajes = document.getElementById("divMensajes");
-var botonEmpezar = document.getElementById("botonEmpezar");
+var pMensajes = document.getElementById("pMensajes");
 var pPalabra = document.getElementById("pPalabra");
 var inputLetra = document.getElementById("letra");
+var spans = document.getElementsByTagName("span");
+var divElegirCategoria = document.getElementById("elegirCategoria");
+var botonesCategoria = document.getElementsByClassName("categoria");
+var divPalabra = document.getElementById("divPalabra");
 
 //variables
 var letra = new String();
 var palabra = new String();
 
 //listeners
-botonBasico.addEventListener("click", jugarBasico);
-// botonAvanzado.addEventListener("click", jugarAvanzado);
-selectTema.addEventListener("change", obtenerTema);
-botonEmpezar.addEventListener("click", iniciarJuegoBasico);
+botonClasico.addEventListener("click", jugarBasico);
+
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", guardarDatos);
 /////////////////////////////////////////////////////////////////////////////
 
-//ocultamos el html del juego (básico y avanzado)
-formularioBasico.style.display = "none";
-inputLetra.style.display = "none";
+//ocultamos el menú categoría
+divElegirCategoria.style.display="none";
+divPalabra.style.display="none";
 
 function jugarBasico() {
+  //escondemos los botones del menú de inicio
+  botonClasico.style.display="none";
+  botonAventura.style.display="none";
   //mostramos el html del juego
-  formularioBasico.style.display = "block";
+  divElegirCategoria.style.display="block";
 }
 function guardarDatos(event) {
   //si el código de la tecla es el del intro
   if (event.keyCode == 13) {
     //recogemos la letra del input
-    letra = inputLetra.value;
-    console.log(letra);
-
+    let texto = inputLetra.value;
+    console.log(texto);
+    //pasamos la letra a minúscula por si no lo estuviera
+    letra=texto.toLowerCase();
     //verificamos si la letra se encuentra en la palabra
     verificarLetra();
   }
 }
-function verificarLetra(){
-  var posicionesLetras= new Array();
-  var contadorLetras= 0;
-  for (var i =0; i<palabra.length; i++){
-    if(letra == palabra.charAt(i)){
-     posicionesLetras.push(i);
-     contadorLetras++;
-     divMensajes.innerHTML="La letra se encuentra " + contadorLetras + " veces en la palabra";
+function verificarLetra() {
+  let contadorLetras = 0;
+  //nos recorremos la palabra
+  for (var i = 0; i < palabra.length; i++) {
+    //li la letra pulsada está en ella
+    if (letra == palabra.charAt(i)) {
+      //pintamos la letra
+      pintarLetra(letra, i);
+      //contador para mostrar el número de letras encontradas en el mensaje
+      contadorLetras++;
+      pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " veces en la palabra";
+    }else{ //si la letra no está
+
+      
     }
   }
 }
+function pintarLetra(letra, posicion) {
+  //pasamos la letra a mayúscula para imprimirla
+  let letraMayus = letra.toUpperCase();
+  //el array de spans contiene los huecos de la palabra, quitamos el borde e imprimimos la/s letra/s
+  spans[posicion].style.border = "none";
+  spans[posicion].innerHTML = letraMayus;
+  //limpiamos el input de introducir letra
+  inputLetra.value = "";
+}
+
 function obtenerTema() {
   return selectTema.options[selectTema.selectedIndex].text;
 }
@@ -69,13 +89,13 @@ function iniciarJuegoBasico() {
   var numero = Math.floor(Math.random() * arrayElegido.length);
 
   //obtenemos la palabra
-   palabra = arrayElegido[numero];
+  palabra = arrayElegido[numero];
   //ayuda para el desarrollo
   console.log(palabra);
   //mostramos los huecos de la palabra en pantalla
   mostrarHuecos(palabra);
 
-  divMensajes.innerHTML = "Introduce una letra y presiona enter";
+  pMensajes.innerHTML = "Introduce una letra y presiona enter";
   //mostramos el input donde introducir las letras
   inputLetra.style.display = "block";
   //ponemos el foco
@@ -97,35 +117,35 @@ function crearArray(tema) {
   switch (tema) {
     case "Animales":
       return (animales = [
-        "Vaca",
-        "Cabra",
-        "Oveja",
-        "Burro",
-        "Leon",
-        "Ballena",
-        "Gallo"
+        "vaca",
+        "cabra",
+        "oveja",
+        "burro",
+        "leon",
+        "ballena",
+        "gallo"
       ]);
       break;
     case "Alimentos":
       return (alimentos = [
-        "Arroz",
-        "Pasta",
-        "Leche",
-        "Pan",
-        "Azucar",
-        "Pollo",
-        "Queso"
+        "arroz",
+        "pasta",
+        "leche",
+        "pan",
+        "azucar",
+        "pollo",
+        "queso"
       ]);
       break;
     case "Ciudades":
       return (ciudades = [
-        "Madrid",
-        "Valencia",
-        "Alicante",
-        "Castellon",
-        "Xativa",
-        "Chella",
-        "Santander"
+        "madrid",
+        "valencia",
+        "alicante",
+        "castellon",
+        "xativa",
+        "chella",
+        "santander"
       ]);
       break;
   }

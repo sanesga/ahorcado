@@ -13,43 +13,44 @@
 </head>
 
 <body>
-  <h1>AHORCADO</h1>
-  <button id="botonBasico">Básico</button>
-  <button id="botonAvanzado">Avanzado</button>
+  <div id="container">
+    <header>
+      <h1>AHORCADO</h1>
+    </header>
 
-  <!----------------------------------JUEGO BÁSICO--------------------------------->
-  
-  <form id="formularioBasico" action="">
-    <label for="tema">Elige el tema</label>
-    <select name="tema" id="selectTema">
-      <option value="animales">Animales</option>
-      <option value="ciudades">Ciudades</option>
-      <option value="alimentos">Alimentos</option>
-    </select>
-    <input id="botonEmpezar" type="button" value="EMPEZAR">
-  </form>
-  <!--aquí aparecerá la palabra elegida, cada letra en un span dentro del div-->
-  <p id="pPalabra"></p>
+    <div id="page">
 
-  <p id="divMensajes"></p>
-  <input id="letra" type="text">
-
-  
-
-  <!----------------------------------JUEGO BÁSICO--------------------------------->
+      <!--BOTONES ELEGIR MODO JUEGO-->
+      <button class="button" id="botonClasico">Aventura</button>
+      <button class="button" id="botonAventura">Clásico</button>
+      <!--BOTONES ELEGIR MODO JUEGO-->
 
 
+      <!--MENÚ ELEGIR CATEGORÍA-->
+      <div id="elegirCategoria">
+        <button class="categoria" id="cine">Cine</button>
+        <button class="categoria" id="musica">Música</button>
+        <button class="categoria" id="deporte">Deporte</button>
+        <!-- <button id="animales">Animales</button>
+        <button id="geografia">Geografía</button>
+        <button id="historia">Historia</button>
+        <button id="aleatorio">aleatorio</button> -->
+      </div>
+      <!--FIN MENÚ ELEGIR CATEGORÍA-->
 
 
 
+      <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
+    <div id="divPalabra">
+    <p id="pPalabra"></p>
+    <!--aquí aparecerá la palabra elegida, cada letra en un span dentro del div-->
+    <p id="pMensajes"></p>
+    <input id="letra" type="text">
+  </div>
+  <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
 
 
-
-
-  <!----------------------------------JUEGO AVANZADO--------------------------------->
-
-  <!----------------------------------JUEGO AVANZADO--------------------------------->
-
+  <footer> </footer>
 
   <script src="index.js"></script>
 </body>
