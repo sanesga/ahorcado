@@ -1,0 +1,13 @@
+.letras{
+  /*formato de cada letra*/
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid black;
+  margin-right: 20px;
+}
+#letra{
+  width: 30px;
+  height: 30px;
+}
