@@ -6,30 +6,43 @@
 .letras {
   /*formato de cada letra*/
   display: inline-block;
-  width: 50px;
+  width: 100px;
   height: 30px;
   border: none;
-  border-bottom: 2px solid black;
+  border-bottom: 9px solid white;
   margin-right: 20px;
   text-align: center;
+  font-size: 100px;
+  color: white;
 }
 #letra {
-  width: 30px;
-  height: 30px;
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  font-size: 100px;
+  text-align: center;
 }
+#letra:focus{
+  outline:0px;
+}
+
+#pMensajes{
+  color: white;
+  font-size: 40px;
+  margin-top: 50px;
+}
+
 #container {
   background-image: url(./img/background.jpg);
   background-repeat: no-repeat;
-  color: white;
+  color: #99a2b6;
   height: 100%;
   width: 80%;
   margin: 0 auto;
 }
 #categoria{
   font-size: 50px;
-}
-#formularioBasico{
-text-align: center;
 }
 #botonEmpezar{
   display: block;
@@ -44,6 +57,7 @@ text-align: center;
 h1 {
   font-size: 200px;
   padding-top: 20px;
+  color: white;
 }
 body {
   width: 100vw;
@@ -58,7 +72,7 @@ body {
   height: 200px;
   width: 200px;
   border-radius: 20px;
-  background-color: white;
+  background-color: #99a2b6;
   margin: 10px;
   font-size: 40px;
   box-shadow:  20px 20px 30px -20px black;
@@ -79,14 +93,15 @@ body {
   margin-bottom: 20px;
   box-shadow:  20px 20px 30px -20px black;
   font-size: 40px;
+  background-color:#99a2b6 ;
 }
-#cine{
-background-color:#69769e ;
+#dibujo{
+  margin: 120px 0 0 70px;
+  width: 500px;
+  height: 700px;
+  background-image: url(./img/horca.png);
+  background-repeat: no-repeat;
 }
-#musica{
 
-}
-#deportes{
 
-}
 

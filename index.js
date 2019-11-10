@@ -12,23 +12,29 @@ var spans = document.getElementsByTagName("span");
 var divElegirCategoria = document.getElementById("elegirCategoria");
 var botonesCategoria = document.getElementsByClassName("categoria");
 var divPalabra = document.getElementById("divPalabra");
+var divDibujo = document.getElementById("dibujo");
 
 //variables
 var letra = new String();
 var palabra = new String();
 
 //listeners
-botonClasico.addEventListener("click", jugarBasico);
+botonClasico.addEventListener("click", jugarClasico);
 
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", guardarDatos);
+for(boton of botonesCategoria){
+  boton.addEventListener("click", iniciarJuego );
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 //ocultamos el menú categoría
 divElegirCategoria.style.display="none";
 divPalabra.style.display="none";
+divDibujo.style.display="none";
 
-function jugarBasico() {
+function jugarClasico() {
   //escondemos los botones del menú de inicio
   botonClasico.style.display="none";
   botonAventura.style.display="none";
@@ -57,9 +63,18 @@ function verificarLetra() {
       pintarLetra(letra, i);
       //contador para mostrar el número de letras encontradas en el mensaje
       contadorLetras++;
-      pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " veces en la palabra";
+      if(contadorLetras==1){
+        pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " vez en la palabra";
+      }else if(contadorLetras>1){
+        pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " veces en la palabra";
+      }
+     
     }else{ //si la letra no está
-
+      pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
+      inputLetra.value="";
+        
+        divDibujo.style.display="block";
+        
       
     }
   }
@@ -74,13 +89,12 @@ function pintarLetra(letra, posicion) {
   inputLetra.value = "";
 }
 
-function obtenerTema() {
-  return selectTema.options[selectTema.selectedIndex].text;
-}
 
-function iniciarJuegoBasico() {
+function iniciarJuego() {
+  //ocultamos las categorias
+  divElegirCategoria.style.display="none";
   //recogemos el tema del select
-  var tema = obtenerTema();
+  let tema= this.id;
 
   //elegimos array según tema
   var arrayElegido = crearArray(tema);
@@ -97,7 +111,7 @@ function iniciarJuegoBasico() {
 
   pMensajes.innerHTML = "Introduce una letra y presiona enter";
   //mostramos el input donde introducir las letras
-  inputLetra.style.display = "block";
+  divPalabra.style.display="block";
   //ponemos el foco
   inputLetra.focus();
 
@@ -106,6 +120,7 @@ function iniciarJuegoBasico() {
 }
 
 function mostrarHuecos(palabra) {
+
   for (var i = 0; i < palabra.length; i++) {
     var span = document.createElement("span");
     span.setAttribute("class", "letras");
@@ -115,7 +130,7 @@ function mostrarHuecos(palabra) {
 
 function crearArray(tema) {
   switch (tema) {
-    case "Animales":
+    case "cine":
       return (animales = [
         "vaca",
         "cabra",
@@ -126,7 +141,7 @@ function crearArray(tema) {
         "gallo"
       ]);
       break;
-    case "Alimentos":
+    case "musica":
       return (alimentos = [
         "arroz",
         "pasta",
@@ -137,7 +152,7 @@ function crearArray(tema) {
         "queso"
       ]);
       break;
-    case "Ciudades":
+    case "deporte":
       return (ciudades = [
         "madrid",
         "valencia",
