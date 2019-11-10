@@ -96,11 +96,37 @@ body {
   background-color:#99a2b6 ;
 }
 #dibujo{
-  margin: 120px 0 0 70px;
-  width: 500px;
-  height: 700px;
-  background-image: url(./img/horca.png);
+  margin: 150px 0 0 70px;
+  width: 380px;
+  height: 580px;
   background-repeat: no-repeat;
+  border-radius: 10px;
+  box-shadow:  20px 20px 30px -20px black;
+
+  opacity:1;
+  transition:"opacity 0.5s linear";
+  /* opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-timing-function: ease-in;
+	animation-duration: 3s; */
+}
+/* @keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+} */
+footer{
+  height: 14%;
+  width: 100%;
+}
+#fallos{
+  margin-left: 26%;
+  text-align: left;
+  font-size: 50px;
+  color: rgb(192, 58, 34);
 }
 
 

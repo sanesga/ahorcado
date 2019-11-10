@@ -13,33 +13,35 @@ var divElegirCategoria = document.getElementById("elegirCategoria");
 var botonesCategoria = document.getElementsByClassName("categoria");
 var divPalabra = document.getElementById("divPalabra");
 var divDibujo = document.getElementById("dibujo");
+var pFallos = document.getElementById("fallos");
 
 //variables
 var letra = new String();
 var palabra = new String();
+var contadorFallos = 0;
 
 //listeners
 botonClasico.addEventListener("click", jugarClasico);
 
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", guardarDatos);
-for(boton of botonesCategoria){
-  boton.addEventListener("click", iniciarJuego );
+for (boton of botonesCategoria) {
+  boton.addEventListener("click", iniciarJuego);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 //ocultamos el menú categoría
-divElegirCategoria.style.display="none";
-divPalabra.style.display="none";
-divDibujo.style.display="none";
+divElegirCategoria.style.display = "none";
+divPalabra.style.display = "none";
+divDibujo.style.display = "none";
 
 function jugarClasico() {
   //escondemos los botones del menú de inicio
-  botonClasico.style.display="none";
-  botonAventura.style.display="none";
+  botonClasico.style.display = "none";
+  botonAventura.style.display = "none";
   //mostramos el html del juego
-  divElegirCategoria.style.display="block";
+  divElegirCategoria.style.display = "block";
 }
 function guardarDatos(event) {
   //si el código de la tecla es el del intro
@@ -48,37 +50,52 @@ function guardarDatos(event) {
     let texto = inputLetra.value;
     console.log(texto);
     //pasamos la letra a minúscula por si no lo estuviera
-    letra=texto.toLowerCase();
+    letra = texto.toLowerCase();
     //verificamos si la letra se encuentra en la palabra
     verificarLetra();
   }
 }
 function verificarLetra() {
   let contadorLetras = 0;
+
   //nos recorremos la palabra
   for (var i = 0; i < palabra.length; i++) {
-    //li la letra pulsada está en ella
+    //si la letra pulsada está en ella
     if (letra == palabra.charAt(i)) {
       //pintamos la letra
       pintarLetra(letra, i);
       //contador para mostrar el número de letras encontradas en el mensaje
       contadorLetras++;
-      if(contadorLetras==1){
-        pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " vez en la palabra";
-      }else if(contadorLetras>1){
-        pMensajes.innerHTML = "La letra se encuentra " + contadorLetras + " veces en la palabra";
-      }
-     
-    }else{ //si la letra no está
-      pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
-      inputLetra.value="";
-        
-        divDibujo.style.display="block";
-        
-      
     }
   }
+  if (contadorLetras == 1) {
+    pMensajes.innerHTML =
+      "La letra se encuentra " + contadorLetras + " vez en la palabra";
+  } else if (contadorLetras > 1) {
+    pMensajes.innerHTML =
+      "La letra se encuentra " + contadorLetras + " veces en la palabra";
+  }
+  if (contadorLetras == 0) {
+    //si la letra no está
+    pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
+    inputLetra.value = "";
+    inputLetra.focus();
+    divDibujo.style.display = "block";
+    divDibujo.addEventListener("change", transicion);
+    divDibujo.style.backgroundImage =
+      "url('./img/fallo" + contadorFallos + ".png')";
+    contadorFallos++;
+
+    pFallos.innerHTML="FALLO " + contadorFallos + " DE 10";
+  }
 }
+function transicion(){
+  // divDibujo.style.opacity=1;
+  // divDibujo.style.transition="opacity 0.5s linear";
+  // opacity:1;
+  // transition:opacity 0.5s linear;
+}
+
 function pintarLetra(letra, posicion) {
   //pasamos la letra a mayúscula para imprimirla
   let letraMayus = letra.toUpperCase();
@@ -89,12 +106,11 @@ function pintarLetra(letra, posicion) {
   inputLetra.value = "";
 }
 
-
 function iniciarJuego() {
   //ocultamos las categorias
-  divElegirCategoria.style.display="none";
+  divElegirCategoria.style.display = "none";
   //recogemos el tema del select
-  let tema= this.id;
+  let tema = this.id;
 
   //elegimos array según tema
   var arrayElegido = crearArray(tema);
@@ -111,7 +127,7 @@ function iniciarJuego() {
 
   pMensajes.innerHTML = "Introduce una letra y presiona enter";
   //mostramos el input donde introducir las letras
-  divPalabra.style.display="block";
+  divPalabra.style.display = "block";
   //ponemos el foco
   inputLetra.focus();
 
@@ -120,7 +136,6 @@ function iniciarJuego() {
 }
 
 function mostrarHuecos(palabra) {
-
   for (var i = 0; i < palabra.length; i++) {
     var span = document.createElement("span");
     span.setAttribute("class", "letras");
