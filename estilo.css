@@ -166,4 +166,31 @@ header {
 #liLogin{
 margin-bottom: 10px;
 }
+#formularioLogin{
+  font-size: 50px;
+}
+.inputName, .inputPassword, .inputRepeatPassword{
+  border: none;
+  height: 40px;
+  width: 500px;
+  background-color:#99a2b6 ;
+  color: black;
+  text-align: center;
+  font-size: 30px;
+  border-radius: 10px;
+}
+.botonEntrar{
+  margin-top: 40px;
+  height: 100px;
+  width: 300px;
+  font-size: 45px;
+  border-radius: 20px;
+  background-color: #99a2b6;
+  box-shadow: 20px 20px 30px -20px black;
+}
+#formularioRegistro{
+  font-size: 40px;
+}
+
+
 

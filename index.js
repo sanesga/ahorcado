@@ -23,6 +23,9 @@ var botonLogin= document.getElementById("botonLogin");
 var formularioLogin = document.getElementById("formularioLogin");
 var enlaceRegistro = document.getElementById("enlaceRegistro");
 var formularioRegistro = document.getElementById("formularioRegistro");
+var inputName= document.getElementById("inputName");
+var botonEntrarLogin= document.getElementById("botonEntrarLogin");
+var botonEntrarRegistro = document.getElementById("botonEntrarRegistro");
 
 //variables
 var letra = new String();
@@ -43,6 +46,7 @@ for (boton of botonesCategoria) {
 imgAyuda.addEventListener("click", darPista);
 botonLogin.addEventListener("click", mostrarLogin);
 enlaceRegistro.addEventListener("click", mostrarRegistro);
+botonEntrarLogin.addEventListener("click", cargarDatosUsuario);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -60,8 +64,17 @@ function mostrarLogin(){
   botonClasico.style.display="none";
   botonAventura.style.display="none";
   formularioLogin.style.display="block";
+  inputName.focus();
+
 }
 function mostrarRegistro(){
+  botonClasico.style.display="none";
+  botonAventura.style.display="none";
+formularioRegistro.style.display="block";
+}
+function cargarDatosUsuario(){
+    formularioLogin.style.display="none";
+    divElegirCategoria.style.display="block";
 
 }
 function darPista(){

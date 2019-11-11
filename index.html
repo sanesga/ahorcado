@@ -71,19 +71,22 @@
 
       <!--FORMULARIO DE LOGIN-->
       <form id="formularioLogin">
-        <label for="name">NOMBRE</label>
-        <input name="name" type="text">
-        <label for="password">CONTRASEÑA</label>
-        <input name="password" type="password">
+        <label id=labelName for="name">NOMBRE USUARIO</label><br>
+        <input class="inputName" id="inputName" name="name" type="text"><br><br>
+        <label id="labelPassword" for="password">CONTRASEÑA</label> <br>
+        <input class="inputPassword" id="inputPassword" name="password" type="password"><br>
+        <input class="botonEntrar" id="botonEntrarLogin" type="button" value="entrar">
       </form>
-
 
       <!--FORMULARIO DE REGISTRO-->
       <form id="formularioRegistro">
-        <label for="name">ELIGE UN NOMBRE DE USUARIO</label>
-        <input name="name" type="text">
-        <label for="password">ELIGE UNA CONTRASEÑA</label>
-        <input name="password" type="password">
+        <label for="name">ELIGE UN NOMBRE DE USUARIO</label><br>
+        <input class="inputName" name="name" type="text"><br><br>
+        <label for="password">ELIGE UNA CONTRASEÑA</label><br>
+        <input class="inputPassword" name="password" type="password"><br><br>
+        <label for="repeatPassword">REPITE LA CONTRASEÑA</label><br>
+        <input class="inputRepeatPassword" name="repeatPassword" type="password"><br>
+        <input class="botonEntrar" id="botonEntrarRegistro" type="button" value="entrar">
       </form>
 
     </div>
