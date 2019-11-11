@@ -3,6 +3,111 @@
   margin: 0;
   padding: 0;
 }
+@font-face {
+  font-family: celtic;
+  src: url(./font/celtic.ttf);
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+}
+#botonFinal{
+  margin-top: 40px;
+  height: 120px;
+  width: 300px;
+  border-radius: 20px;
+  background-color: #99a2b6;
+  font-size: 40px;
+  box-shadow: 20px 20px 30px -20px black;
+}
+.button {
+  height: 200px;
+  width: 200px;
+  border-radius: 20px;
+  background-color: #99a2b6;
+  margin: 10px;
+  font-size: 40px;
+  box-shadow: 20px 20px 30px -20px black;
+}
+.categoria {
+  width: 500px;
+  height: 70px;
+  border-radius: 20px;
+  display: block;
+  margin-bottom: 20px;
+  box-shadow: 20px 20px 30px -20px black;
+  font-size: 40px;
+  background-color: #99a2b6;
+}
+#container {
+  background-image: url(./img/background.jpg);
+  background-repeat: no-repeat;
+  color: #99a2b6;
+  height: 100%;
+  width: 80%;
+  margin: 0 auto;
+}
+#dibujo {
+  margin: 150px 0 0 70px;
+  width: 380px;
+  height: 580px;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  box-shadow: 20px 20px 30px -20px black;
+
+  opacity: 1;
+  transition: "opacity 0.5s linear";
+  /* opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-timing-function: ease-in;
+	animation-duration: 3s; */
+}
+
+/* @keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+} */
+
+#divPalabra {
+  margin: 170px 0 0 10px;
+}
+#fallos {
+  margin-top: 30px;
+  text-align: left;
+  font-size: 30px;
+  color: rgb(192, 58, 34);
+}
+footer {
+  height: 14%;
+  width: 100%;
+}
+h1 {
+  font-size: 200px;
+  padding-top: 20px;
+  color: white;
+}
+img {
+  width: 60px;
+  height: 60px;
+  vertical-align: middle;
+}
+#letra {
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  font-size: 100px;
+  text-align: center;
+}
+
+#letra:focus {
+  outline: 0px;
+}
 .letras {
   /*formato de cada letra*/
   display: inline-block;
@@ -15,118 +120,26 @@
   font-size: 100px;
   color: white;
 }
-#letra {
-  margin-top: 50px;
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
-  font-size: 100px;
-  text-align: center;
+#mensajeFinal{
+font-size: 70px;
+color: white;
 }
-#letra:focus{
-  outline:0px;
-}
-
-#pMensajes{
-  color: white;
-  font-size: 40px;
-  margin-top: 50px;
-}
-
-#container {
-  background-image: url(./img/background.jpg);
-  background-repeat: no-repeat;
-  color: #99a2b6;
-  height: 100%;
-  width: 80%;
-  margin: 0 auto;
-}
-#categoria{
-  font-size: 50px;
-}
-#botonEmpezar{
-  display: block;
-  height: 150px;
-  width: 150px;
-  border-radius: 20px;
-  box-shadow:  20px 20px 30px -20px black;
+#monedas {
+  color: #eac28f;
   font-size: 30px;
-  margin: 0 auto;
- 
+  text-align: left;
 }
-h1 {
-  font-size: 200px;
-  padding-top: 20px;
-  color: white;
-}
-body {
-  width: 100vw;
-  height: 100vh;
-  text-align: center;
-}
-@font-face {
-  font-family: celtic;
-  src: url(./font/celtic.ttf);
-}
-.button{
-  height: 200px;
-  width: 200px;
-  border-radius: 20px;
-  background-color: #99a2b6;
-  margin: 10px;
-  font-size: 40px;
-  box-shadow:  20px 20px 30px -20px black;
-}
-#page{
+#page {
   width: 100%;
   height: 50%;
-  display : flex;
-  align-items : center;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
-
-.categoria{
-  width: 500px;
-  height: 70px;
-  border-radius: 20px;
-  display: block;
-  margin-bottom: 20px;
-  box-shadow:  20px 20px 30px -20px black;
+#pMensajes {
+  color: white;
   font-size: 40px;
-  background-color:#99a2b6 ;
-}
-#dibujo{
-  margin: 150px 0 0 70px;
-  width: 380px;
-  height: 580px;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  box-shadow:  20px 20px 30px -20px black;
-
-  opacity:1;
-  transition:"opacity 0.5s linear";
-  /* opacity: 1;
-	animation-name: fadeInOpacity;
-	animation-timing-function: ease-in;
-	animation-duration: 3s; */
-}
-/* @keyframes fadeInOpacity {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-} */
-footer{
-  height: 14%;
-  width: 100%;
-}
-#fallos{
-  margin-left: 26%;
-  text-align: left;
-  font-size: 50px;
-  color: rgb(192, 58, 34);
+  margin-top: 50px;
 }
 
 

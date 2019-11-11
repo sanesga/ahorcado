@@ -4,7 +4,6 @@
 //elementos del dom
 var botonClasico = document.getElementById("botonClasico");
 var botonAventura = document.getElementById("botonAventura");
-var selectTema = document.getElementById("selectTema");
 var pMensajes = document.getElementById("pMensajes");
 var pPalabra = document.getElementById("pPalabra");
 var inputLetra = document.getElementById("letra");
@@ -14,15 +13,22 @@ var botonesCategoria = document.getElementsByClassName("categoria");
 var divPalabra = document.getElementById("divPalabra");
 var divDibujo = document.getElementById("dibujo");
 var pFallos = document.getElementById("fallos");
+var pMonedas = document.getElementById("monedas");
+var footer = document.getElementsByTagName("footer");
+var divMensajeFinal = document.getElementById("mensajeFinal");
+var pTextoFinal = document.getElementById("textoFinal");
+var botonFinal = document.getElementById("botonFinal");
 
 //variables
 var letra = new String();
 var palabra = new String();
 var contadorFallos = 0;
+var monedas = 0;
+var contadorLetras= 0;
 
 //listeners
 botonClasico.addEventListener("click", jugarClasico);
-
+botonFinal.addEventListener("click", reiniciarPagina);
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", guardarDatos);
 for (boton of botonesCategoria) {
@@ -35,7 +41,11 @@ for (boton of botonesCategoria) {
 divElegirCategoria.style.display = "none";
 divPalabra.style.display = "none";
 divDibujo.style.display = "none";
-
+footer[0].style.display = "none";
+divMensajeFinal.style.display="none";
+function reiniciarPagina(){
+  
+}
 function jugarClasico() {
   //escondemos los botones del menú de inicio
   botonClasico.style.display = "none";
@@ -56,7 +66,8 @@ function guardarDatos(event) {
   }
 }
 function verificarLetra() {
-  let contadorLetras = 0;
+  let numeroLetras = 0;
+
 
   //nos recorremos la palabra
   for (var i = 0; i < palabra.length; i++) {
@@ -65,17 +76,33 @@ function verificarLetra() {
       //pintamos la letra
       pintarLetra(letra, i);
       //contador para mostrar el número de letras encontradas en el mensaje
+      numeroLetras++;
       contadorLetras++;
+      console.log("CONTADOR LETRAS" + contadorLetras);
+      
+      //sumamos 5 monedas por letra acertada
+      monedas += 5;
+
+      if(contadorLetras==palabra.length){ //ya se han encontrado todas las letras
+        divMensajeFinal.style.display="block";
+        divPalabra.style.display="none";
+        divDibujo.style.display="none";
+        pTextoFinal.innerHTML="Has ganado";
+        contadorLetras=0;
+        spans=[]; 
+        }
     }
   }
-  if (contadorLetras == 1) {
+  //imprimimos las monedas en el p
+  pMonedas.innerHTML = "<img src='./img/coin.png' alt='moneda'> x " + monedas;
+  if (numeroLetras == 1) {
     pMensajes.innerHTML =
-      "La letra se encuentra " + contadorLetras + " vez en la palabra";
-  } else if (contadorLetras > 1) {
+      "La letra se encuentra " + numeroLetras + " vez en la palabra";
+  } else if (numeroLetras > 1) {
     pMensajes.innerHTML =
-      "La letra se encuentra " + contadorLetras + " veces en la palabra";
+      "La letra se encuentra " + numeroLetras + " veces en la palabra";
   }
-  if (contadorLetras == 0) {
+  if (numeroLetras == 0) {
     //si la letra no está
     pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
     inputLetra.value = "";
@@ -86,10 +113,11 @@ function verificarLetra() {
       "url('./img/fallo" + contadorFallos + ".png')";
     contadorFallos++;
 
-    pFallos.innerHTML="FALLO " + contadorFallos + " DE 10";
+    pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
   }
 }
-function transicion(){
+
+function transicion() {
   // divDibujo.style.opacity=1;
   // divDibujo.style.transition="opacity 0.5s linear";
   // opacity:1;
@@ -109,6 +137,8 @@ function pintarLetra(letra, posicion) {
 function iniciarJuego() {
   //ocultamos las categorias
   divElegirCategoria.style.display = "none";
+  //mostramos el footer
+  footer[0].style.display = "block";
   //recogemos el tema del select
   let tema = this.id;
 
@@ -132,7 +162,7 @@ function iniciarJuego() {
   inputLetra.focus();
 
   //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
-  //seguimos a partir del método obtenerLetra
+  //seguimos a partir del método guardarDatos
 }
 
 function mostrarHuecos(palabra) {
