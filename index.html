@@ -16,13 +16,21 @@
   <div id="container">
     <header>
       <h1>AHORCADO</h1>
+
+      <nav>
+        <ul>
+          <li id="liLogin"> <input id="botonLogin" type="button" value="LOGIN"> </li>
+          <li> <a id="enlaceRegistro" href="#">registro</a></li>
+        </ul>
+
+      </nav>
     </header>
 
     <div id="page">
 
       <!--BOTONES ELEGIR MODO JUEGO-->
-      <button class="button" id="botonClasico">Aventura</button>
-      <button class="button" id="botonAventura">Clásico</button>
+      <button class="button" id="botonClasico">Clásico</button>
+      <button class="button" id="botonAventura">Aventura</button>
       <!--BOTONES ELEGIR MODO JUEGO-->
 
 
@@ -38,20 +46,16 @@
       </div>
       <!--FIN MENÚ ELEGIR CATEGORÍA-->
 
-
-
       <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
       <div id="divPalabra">
         <p id="pPalabra"></p>
         <!--aquí aparecerá la palabra elegida, cada letra en un span dentro del div-->
         <p id="pMensajes"></p>
         <input id="letra" type="text">
-
-
-     
-        <p id="monedas"><img src="./img/coin.png" alt="moneda"> x 0</p>
+        <div id="ayuda">
+          <img class="interrogante" id="help" src="./img/help.png" alt="interrogante">
+        </div>
         <p id="fallos"></p>
-
       </div>
       <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
 
@@ -61,19 +65,34 @@
 
       <!--AQUÍ APARECE EL MENSAJE FINAL (GANAR O PERDER)-->
       <div id="mensajeFinal">
-          <p id="textoFinal"></p>
-          <input id="botonFinal" class="button" type="button" value="Volver a jugar">
+        <p id="textoFinal"></p>
+        <input id="botonFinal" class="button" type="button" value="Volver a jugar">
       </div>
-    
+
+      <!--FORMULARIO DE LOGIN-->
+      <form id="formularioLogin">
+        <label for="name">NOMBRE</label>
+        <input name="name" type="text">
+        <label for="password">CONTRASEÑA</label>
+        <input name="password" type="password">
+      </form>
+
+
+      <!--FORMULARIO DE REGISTRO-->
+      <form id="formularioRegistro">
+        <label for="name">ELIGE UN NOMBRE DE USUARIO</label>
+        <input name="name" type="text">
+        <label for="password">ELIGE UNA CONTRASEÑA</label>
+        <input name="password" type="password">
+      </form>
 
     </div>
-
     <footer>
-
-
+      <!--MONEDAS-->
+      <p id="monedas"><img src="./img/coin.png" alt="moneda"> x 0</p>
     </footer>
-
-    <script src="index.js"></script>
+  </div>
+  <script src="index.js"></script>
 </body>
 
 </html>

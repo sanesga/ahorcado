@@ -12,7 +12,7 @@ body {
   height: 100vh;
   text-align: center;
 }
-#botonFinal{
+#botonFinal {
   margin-top: 40px;
   height: 120px;
   width: 300px;
@@ -77,14 +77,10 @@ body {
   margin: 170px 0 0 10px;
 }
 #fallos {
-  margin-top: 30px;
+  margin-top: 10px;
   text-align: left;
   font-size: 30px;
   color: rgb(192, 58, 34);
-}
-footer {
-  height: 14%;
-  width: 100%;
 }
 h1 {
   font-size: 200px;
@@ -120,14 +116,13 @@ img {
   font-size: 100px;
   color: white;
 }
-#mensajeFinal{
-font-size: 70px;
-color: white;
+#mensajeFinal {
+  font-size: 70px;
+  color: white;
 }
 #monedas {
   color: #eac28f;
   font-size: 30px;
-  text-align: left;
 }
 #page {
   width: 100%;
@@ -135,12 +130,40 @@ color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 45px;
 }
 #pMensajes {
   color: white;
   font-size: 40px;
   margin-top: 50px;
 }
-
-
+#ayuda {
+  margin-top: 10px;
+  text-align: left;
+}
+#botonLogin {
+  width: 120px;
+  height: 70px;
+  border-radius: 10px;
+  font-size: 30px;
+  background-color: #99a2b6;
+  box-shadow: 20px 20px 30px -20px black;
+  margin-right: 30px;
+}
+nav{
+  float: right;
+}
+header {
+  width: 100%;
+  height: 20%;
+}
+#enlaceRegistro {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  margin-right: 20px;
+}
+#liLogin{
+margin-bottom: 10px;
+}
 

@@ -18,13 +18,19 @@ var footer = document.getElementsByTagName("footer");
 var divMensajeFinal = document.getElementById("mensajeFinal");
 var pTextoFinal = document.getElementById("textoFinal");
 var botonFinal = document.getElementById("botonFinal");
+var imgAyuda=document.getElementById("help");
+var botonLogin= document.getElementById("botonLogin");
+var formularioLogin = document.getElementById("formularioLogin");
+var enlaceRegistro = document.getElementById("enlaceRegistro");
+var formularioRegistro = document.getElementById("formularioRegistro");
 
 //variables
 var letra = new String();
 var palabra = new String();
 var contadorFallos = 0;
 var monedas = 0;
-var contadorLetras= 0;
+var contadorLetras = 0;
+var pista = false;
 
 //listeners
 botonClasico.addEventListener("click", jugarClasico);
@@ -34,6 +40,9 @@ inputLetra.addEventListener("keypress", guardarDatos);
 for (boton of botonesCategoria) {
   boton.addEventListener("click", iniciarJuego);
 }
+imgAyuda.addEventListener("click", darPista);
+botonLogin.addEventListener("click", mostrarLogin);
+enlaceRegistro.addEventListener("click", mostrarRegistro);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -41,10 +50,33 @@ for (boton of botonesCategoria) {
 divElegirCategoria.style.display = "none";
 divPalabra.style.display = "none";
 divDibujo.style.display = "none";
-footer[0].style.display = "none";
-divMensajeFinal.style.display="none";
-function reiniciarPagina(){
-  
+divMensajeFinal.style.display = "none";
+formularioLogin.style.display="none";
+formularioRegistro.style.display="none";
+function reiniciarPagina() {
+  location.reload();
+}
+function mostrarLogin(){
+  botonClasico.style.display="none";
+  botonAventura.style.display="none";
+  formularioLogin.style.display="block";
+}
+function mostrarRegistro(){
+
+}
+function darPista(){
+  for(var i=0; i<spans.length;i++){
+    if(spans[i].innerHTML=="" && pista==false){ //este span estará vacío, insertamos la pista
+      spans[i].style.border="none"; //quitamos el borde que delimita el hueco
+      spans[i].innerHTML=palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
+      pista=true; //ya hemos dado la pista
+      contadorLetras++;
+      inputLetra.focus();
+    }
+  }
+  //oscurecemos el interrogante y desactivamos el click
+  imgAyuda.setAttribute("src", "./img/helpUsado.png");
+  imgAyuda.disabled=true;
 }
 function jugarClasico() {
   //escondemos los botones del menú de inicio
@@ -68,7 +100,6 @@ function guardarDatos(event) {
 function verificarLetra() {
   let numeroLetras = 0;
 
-
   //nos recorremos la palabra
   for (var i = 0; i < palabra.length; i++) {
     //si la letra pulsada está en ella
@@ -78,19 +109,22 @@ function verificarLetra() {
       //contador para mostrar el número de letras encontradas en el mensaje
       numeroLetras++;
       contadorLetras++;
-      console.log("CONTADOR LETRAS" + contadorLetras);
-      
+
       //sumamos 5 monedas por letra acertada
       monedas += 5;
 
-      if(contadorLetras==palabra.length){ //ya se han encontrado todas las letras
-        divMensajeFinal.style.display="block";
-        divPalabra.style.display="none";
-        divDibujo.style.display="none";
-        pTextoFinal.innerHTML="Has ganado";
-        contadorLetras=0;
-        spans=[]; 
-        }
+      if (contadorLetras == palabra.length) {
+        inputLetra.disabled=true;
+        setTimeout(function() {
+          //si tenemos 10 fallos, se acaba el juego
+          divMensajeFinal.style.display = "block";
+          divPalabra.style.display = "none";
+          divDibujo.style.display = "none";
+          pTextoFinal.innerHTML = "Has ganado";
+          contadorLetras = 0;
+          spans = [];
+        }, 3000);
+      }
     }
   }
   //imprimimos las monedas en el p
@@ -114,6 +148,19 @@ function verificarLetra() {
     contadorFallos++;
 
     pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
+
+    if (contadorFallos == 10) {
+      inputLetra.disabled=true;
+      setTimeout(function() {
+        //si tenemos 10 fallos, se acaba el juego
+        divMensajeFinal.style.display = "block";
+        divPalabra.style.display = "none";
+        divDibujo.style.display = "none";
+        pTextoFinal.innerHTML = "Has perdido";
+        contadorLetras = 0;
+        spans = [];
+      }, 3000);
+    }
   }
 }
 
