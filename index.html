@@ -16,20 +16,19 @@
   <div id="container">
     <header>
       <h1>AHORCADO</h1>
-
+      <!--Menú-->
       <nav>
         <ul>
           <li><a id="enlaceLogin" href="#">LOGIN</a></li>
           <li> <a id="enlaceRegistro" href="#">registro</a></li>
           <li id="nombreUsuario">usuario</li>
-          <li ><a id="logOut" href="#">LOG OUT</a></li>
+          <li><a id="logOut" href="#">LOG OUT</a></li>
         </ul>
-
       </nav>
+      <!--Menú-->
     </header>
 
     <div id="page">
-
       <!--BOTONES ELEGIR MODO JUEGO-->
       <button class="button" id="botonClasico">Clásico</button>
       <button class="button" id="botonAventura">Aventura</button>
@@ -46,7 +45,7 @@
         <button id="historia">Historia</button>
         <button id="aleatorio">aleatorio</button> -->
       </div>
-      <!--FIN MENÚ ELEGIR CATEGORÍA-->
+    
 
       <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
       <div id="divPalabra">
@@ -59,11 +58,11 @@
         </div>
         <p id="fallos"></p>
       </div>
-      <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
+    
 
       <!--AQUÍ APARECE EL DIBUJO-->
       <div id="dibujo"></div>
-      <!--AQUÍ APARECE EL DIBUJO-->
+    
 
       <!--AQUÍ APARECE EL MENSAJE FINAL (GANAR O PERDER)-->
       <div id="mensajeFinal">
@@ -73,7 +72,7 @@
 
       <!--FORMULARIO DE LOGIN-->
       <form id="formularioLogin">
-        <label  for="name">NOMBRE USUARIO</label><br>
+        <label for="name">NOMBRE USUARIO</label><br>
         <input class="inputName" id="inputLoginName" name="name" type="text"><br><br>
         <label for="password">CONTRASEÑA</label> <br>
         <input class="inputPassword" id="inputLoginPassword" name="password" type="password"><br>
@@ -88,13 +87,13 @@
         <input class="inputPassword" id="inputRegistroPassword" name="password" type="password"><br><br>
         <label for="repeatPassword">REPITE LA CONTRASEÑA</label><br>
         <input class="inputRepeatPassword" id="inputRegistroPasswordRepeat" name="repeatPassword" type="password"><br>
-        <input class="botonEntrar" id="botonEntrarRegistro" type="button" value="entrar">
+        <input class="botonEntrar" id="botonEntrarRegistro" type="button" value="registrar">
       </form>
 
     </div>
     <footer>
       <!--MONEDAS-->
-      <p id="monedas"><img src="./img/coin.png" alt="moneda"> x 0</p>
+      <p id="monedas"></p>
     </footer>
   </div>
   <script src="index.js"></script>
