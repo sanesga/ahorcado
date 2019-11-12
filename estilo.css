@@ -126,7 +126,7 @@ img {
 }
 #page {
   width: 100%;
-  height: 50%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,36 +187,35 @@ nav{
   width: 100%;
   height: 40%;
 }
-li{
-  display: inline;
-}
 li a{
   text-decoration:none;
+  color: white;
 }
-#enlaceLogin{
-float: left;
-height: 70px;
-width: 120px;
-background-color: #99a2b6;
+li{
+display: inline;
+padding: 20px;
+background-color: #384A62;
 border-radius: 10px;
 text-align: center;
-color: black;
 box-shadow: 20px 20px 30px -20px black;
 border-top: 2px solid white;
 border-left: 2px solid white;
 line-height: 70px;
-font-size:25px;
+
 margin-left: 20px;
 }
+#enlaceLogin{
+  font-size:15px;
+}
 #enlaceRegistro {
-float: left;
-font-size:20px;
- color: white;
+  font-size:20px;
 }
 #nombreUsuario {
+  font-size:20px;
   color: rgb(192, 58, 34);
-  font-size: 35px;
- float: right;
- margin-right: 20px;
+}
+#logOut{
+  font-size:15px;
+  
 }
 /*ELEMENTOS DEL MENÚ*/

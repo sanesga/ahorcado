@@ -31,6 +31,7 @@ var inputRegistroPasswordRepeat = document.getElementById("inputRegistroPassword
 var nombreUsuario = document.getElementById("nombreUsuario");
 var botonEntrarLogin = document.getElementById("botonEntrarLogin");
 var botonEntrarRegistro = document.getElementById("botonEntrarRegistro");
+var logOut = document.getElementById("logOut");
 
 //variables
 var letra = new String();
@@ -40,12 +41,13 @@ var monedas = 0;
 var contadorLetras = 0;
 var pista = false;
 var usuarios = new Array();
+var usuarioActual =new Object();
 
 //listeners
 botonClasico.addEventListener("click", jugarClasico);
 botonFinal.addEventListener("click", reiniciarPagina);
 //evento al presionar la tecla enter
-inputLetra.addEventListener("keypress", guardarDatos);
+inputLetra.addEventListener("keypress", verificarLetra);
 for (boton of botonesCategoria) {
   boton.addEventListener("click", iniciarJuego);
 }
@@ -54,6 +56,8 @@ enlaceLogin.addEventListener("click", mostrarLogin);
 enlaceRegistro.addEventListener("click", mostrarRegistro);
 botonEntrarLogin.addEventListener("click", login);
 botonEntrarRegistro.addEventListener("click", registrarse);
+window.addEventListener("beforeunload", cerrarSesion);
+logOut.addEventListener("click", cerrarSesion);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -67,6 +71,20 @@ formularioRegistro.style.display = "none";
 
 function reiniciarPagina() {
   location.reload();
+}
+function cerrarSesion(){
+  //al cerrar la pestaña del navegador, guardamos el usuario actual con sus atributos modificados en el array de usuarios y en el local storage
+  for (usuario of usuarios){
+    if(usuarioActual.name==usuario.name){
+      usuario.monedas=usuarioActual.monedas;
+    }
+  }
+  console.log(usuarios);
+  if (typeof Storage !== "undefined") {
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  } else {
+    alert("tu navegador no soporta el guardado de datos, prueba con otro.");
+  }
 }
 
 function mostrarLogin() {
@@ -94,6 +112,7 @@ function registrarse() {
   let usuario = new Object();
   usuario.name = registroNombre;
   usuario.password = registroPassword;
+  usuario.monedas = 0;
 
   usuarios.push(usuario);
 
@@ -114,7 +133,6 @@ function login() {
   let loginName = inputLoginName.value;
   let loginPassword = inputLoginPassword.value;
 
-  let usuarioActual = new Object();
   usuarioActual.name = loginName;
   usuarioActual.password = loginPassword;
 
@@ -124,7 +142,9 @@ function login() {
   usuarios = JSON.parse(json);
 
   for (usuario of usuarios) {
-    if (JSON.stringify(usuarioActual) == JSON.stringify(usuario)) { //convertimos a json para poder comparar más fácilmente los dos objetos
+    console.log(usuario.name);
+    console.log(usuarioActual.name);
+    if (usuarioActual.name == usuario.name) {
       nombreUsuario.innerHTML=usuario.name;
     } else {
       alert("el usuario no existe, debes registrarte");
@@ -154,19 +174,16 @@ function jugarClasico() {
   //mostramos el html del juego
   divElegirCategoria.style.display = "block";
 }
-function guardarDatos(event) {
-  //si el código de la tecla es el del intro
-  if (event.keyCode == 13) {
-    //recogemos la letra del input
-    let texto = inputLetra.value;
-    console.log(texto);
-    //pasamos la letra a minúscula por si no lo estuviera
-    letra = texto.toLowerCase();
-    //verificamos si la letra se encuentra en la palabra
-    verificarLetra();
-  }
-}
-function verificarLetra() {
+
+
+function verificarLetra(event) {
+    //si el código de la tecla es el del intro
+    if (event.keyCode == 13) {
+      //recogemos la letra del input
+      let texto = inputLetra.value;
+      //pasamos la letra a minúscula por si no lo estuviera
+      letra = texto.toLowerCase();
+      //verificamos si la letra se encuentra en la palabra
   let numeroLetras = 0;
 
   //nos recorremos la palabra
@@ -181,6 +198,8 @@ function verificarLetra() {
 
       //sumamos 5 monedas por letra acertada
       monedas += 5;
+      //guardamos las monedas en el usuario
+      usuarioActual.monedas=monedas;
 
       if (contadorLetras == palabra.length) {
         inputLetra.disabled = true;
@@ -232,6 +251,7 @@ function verificarLetra() {
     }
   }
 }
+}
 
 function transicion() {
   // divDibujo.style.opacity=1;
@@ -278,7 +298,7 @@ function iniciarJuego() {
   inputLetra.focus();
 
   //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
-  //seguimos a partir del método guardarDatos
+  //seguimos a partir del método verificarLetra
 }
 
 function mostrarHuecos(palabra) {
