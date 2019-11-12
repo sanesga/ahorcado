@@ -18,13 +18,18 @@ var footer = document.getElementsByTagName("footer");
 var divMensajeFinal = document.getElementById("mensajeFinal");
 var pTextoFinal = document.getElementById("textoFinal");
 var botonFinal = document.getElementById("botonFinal");
-var imgAyuda=document.getElementById("help");
-var botonLogin= document.getElementById("botonLogin");
+var imgAyuda = document.getElementById("help");
+var enlaceLogin = document.getElementById("enlaceLogin");
 var formularioLogin = document.getElementById("formularioLogin");
 var enlaceRegistro = document.getElementById("enlaceRegistro");
 var formularioRegistro = document.getElementById("formularioRegistro");
-var inputName= document.getElementById("inputName");
-var botonEntrarLogin= document.getElementById("botonEntrarLogin");
+var inputLoginName = document.getElementById("inputLoginName");
+var inputLoginPassword = document.getElementById("inputLoginPassword");
+var inputRegistroName = document.getElementById("inputRegistroName");
+var inputRegistroPassword = document.getElementById("inputRegistroPassword");
+var inputRegistroPasswordRepeat = document.getElementById("inputRegistroPasswordRepeat");
+var nombreUsuario = document.getElementById("nombreUsuario");
+var botonEntrarLogin = document.getElementById("botonEntrarLogin");
 var botonEntrarRegistro = document.getElementById("botonEntrarRegistro");
 
 //variables
@@ -34,6 +39,7 @@ var contadorFallos = 0;
 var monedas = 0;
 var contadorLetras = 0;
 var pista = false;
+var usuarios = new Array();
 
 //listeners
 botonClasico.addEventListener("click", jugarClasico);
@@ -44,9 +50,10 @@ for (boton of botonesCategoria) {
   boton.addEventListener("click", iniciarJuego);
 }
 imgAyuda.addEventListener("click", darPista);
-botonLogin.addEventListener("click", mostrarLogin);
+enlaceLogin.addEventListener("click", mostrarLogin);
 enlaceRegistro.addEventListener("click", mostrarRegistro);
-botonEntrarLogin.addEventListener("click", cargarDatosUsuario);
+botonEntrarLogin.addEventListener("click", login);
+botonEntrarRegistro.addEventListener("click", registrarse);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -55,41 +62,90 @@ divElegirCategoria.style.display = "none";
 divPalabra.style.display = "none";
 divDibujo.style.display = "none";
 divMensajeFinal.style.display = "none";
-formularioLogin.style.display="none";
-formularioRegistro.style.display="none";
+formularioLogin.style.display = "none";
+formularioRegistro.style.display = "none";
+
 function reiniciarPagina() {
   location.reload();
 }
-function mostrarLogin(){
-  botonClasico.style.display="none";
-  botonAventura.style.display="none";
-  formularioLogin.style.display="block";
-  inputName.focus();
 
+function mostrarLogin() {
+  formularioRegistro.style.display = "none";
+  botonClasico.style.display = "none";
+  botonAventura.style.display = "none";
+  formularioLogin.style.display = "block";
+  inputLoginName.focus();
 }
-function mostrarRegistro(){
-  botonClasico.style.display="none";
-  botonAventura.style.display="none";
-formularioRegistro.style.display="block";
+function mostrarRegistro() {
+  formularioLogin.style.display = "none";
+  botonClasico.style.display = "none";
+  botonAventura.style.display = "none";
+  formularioRegistro.style.display = "block";
+  inputRegistroName.focus();
 }
-function cargarDatosUsuario(){
-    formularioLogin.style.display="none";
-    divElegirCategoria.style.display="block";
 
+function registrarse() {
+  //recogemos los datos del formulario y registramos al usuario
+  let registroNombre = inputRegistroName.value;
+  let registroPassword = inputRegistroPassword.value;
+  let registroPassword2 = inputRegistroPasswordRepeat.value;
+
+  //creamos una clase usuario
+  let usuario = new Object();
+  usuario.name = registroNombre;
+  usuario.password = registroPassword;
+
+  usuarios.push(usuario);
+
+  //guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
+  if (typeof Storage !== "undefined") {
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  } else {
+    alert("tu navegador no soporta el guardado de datos, prueba con otro.");
+  }
+  formularioRegistro.style.display = "none";
+  formularioLogin.style.display = "block";
 }
-function darPista(){
-  for(var i=0; i<spans.length;i++){
-    if(spans[i].innerHTML=="" && pista==false){ //este span estará vacío, insertamos la pista
-      spans[i].style.border="none"; //quitamos el borde que delimita el hueco
-      spans[i].innerHTML=palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
-      pista=true; //ya hemos dado la pista
+
+function login() {
+  formularioLogin.style.display = "none";
+  divElegirCategoria.style.display = "block";
+  //recogemos los datos
+  let loginName = inputLoginName.value;
+  let loginPassword = inputLoginPassword.value;
+
+  let usuarioActual = new Object();
+  usuarioActual.name = loginName;
+  usuarioActual.password = loginPassword;
+
+  //verificamos que el usuario esté registrado en la base de datos
+  //recuperamos datos
+  let json = localStorage.getItem("usuarios");
+  usuarios = JSON.parse(json);
+
+  for (usuario of usuarios) {
+    if (JSON.stringify(usuarioActual) == JSON.stringify(usuario)) { //convertimos a json para poder comparar más fácilmente los dos objetos
+      nombreUsuario.innerHTML=usuario.name;
+    } else {
+      alert("el usuario no existe, debes registrarte");
+    }
+  }
+}
+
+function darPista() {
+  for (var i = 0; i < spans.length; i++) {
+    if (spans[i].innerHTML == "" && pista == false) {
+      //este span estará vacío, insertamos la pista
+      spans[i].style.border = "none"; //quitamos el borde que delimita el hueco
+      spans[i].innerHTML = palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
+      pista = true; //ya hemos dado la pista
       contadorLetras++;
       inputLetra.focus();
     }
   }
   //oscurecemos el interrogante y desactivamos el click
   imgAyuda.setAttribute("src", "./img/helpUsado.png");
-  imgAyuda.disabled=true;
+  imgAyuda.disabled = true;
 }
 function jugarClasico() {
   //escondemos los botones del menú de inicio
@@ -127,7 +183,7 @@ function verificarLetra() {
       monedas += 5;
 
       if (contadorLetras == palabra.length) {
-        inputLetra.disabled=true;
+        inputLetra.disabled = true;
         setTimeout(function() {
           //si tenemos 10 fallos, se acaba el juego
           divMensajeFinal.style.display = "block";
@@ -163,7 +219,7 @@ function verificarLetra() {
     pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
 
     if (contadorFallos == 10) {
-      inputLetra.disabled=true;
+      inputLetra.disabled = true;
       setTimeout(function() {
         //si tenemos 10 fallos, se acaba el juego
         divMensajeFinal.style.display = "block";
