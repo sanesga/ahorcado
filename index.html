@@ -19,10 +19,10 @@
       <!--Menú-->
       <nav>
         <ul>
-          <li><a id="enlaceLogin" href="#">LOGIN</a></li>
-          <li> <a id="enlaceRegistro" href="#">registro</a></li>
+          <li id="liLogin">LOGIN</li>
+          <li id="liRegistro">registro</li>
           <li id="nombreUsuario">usuario</li>
-          <li><a id="logOut" href="#">LOG OUT</a></li>
+          <li id="logOut">LOG OUT</li>
         </ul>
       </nav>
       <!--Menú-->
@@ -30,14 +30,15 @@
 
     <div id="page">
       <!--BOTONES ELEGIR MODO JUEGO-->
-      <button class="button" id="botonClasico">Clásico</button>
-      <button class="button" id="botonAventura">Aventura</button>
+      <div id="parte1">
+        <button class="button" id="botonJugar">JUGAR</button>
+      </div>
       <!--BOTONES ELEGIR MODO JUEGO-->
 
 
       <!--MENÚ ELEGIR CATEGORÍA-->
-      <div id="elegirCategoria">
-        <button class="categoria" id="cine">Cine</button>
+      <div id="parte2">
+        <button class="categoria" id="cine"><img src="" alt=""><br>Cine</button>
         <button class="categoria" id="musica">Música</button>
         <button class="categoria" id="deporte">Deporte</button>
         <!-- <button id="animales">Animales</button>
@@ -45,27 +46,25 @@
         <button id="historia">Historia</button>
         <button id="aleatorio">aleatorio</button> -->
       </div>
-    
 
       <!--AQUÍ APARECE LA PALABRA Y LOS MENSAJES-->
-      <div id="divPalabra">
-        <p id="pPalabra"></p>
-        <!--aquí aparecerá la palabra elegida, cada letra en un span dentro del div-->
-        <p id="pMensajes"></p>
-        <input id="letra" type="text">
-        <div id="ayuda">
-          <img class="interrogante" id="help" src="./img/help.png" alt="interrogante">
+      <div id="parte3">
+        <div id="divPalabra">
+            <!--aquí aparecerá la palabra elegida, cada letra en un span dentro del div-->
+          <p id="pPalabra"></p>
+          <p id="pMensajes"></p>
+          <input id="letra" maxlength="1" type="text">
+          <div id="ayuda">
+            <img class="interrogante" id="help" src="./img/help.png" alt="interrogante">
+            <p id="fallos">Fallos 0 / 10</p>
+          </div>
         </div>
-        <p id="fallos"></p>
+        <!--AQUÍ APARECE EL DIBUJO-->
+        <div id="dibujo"></div>
       </div>
-    
-
-      <!--AQUÍ APARECE EL DIBUJO-->
-      <div id="dibujo"></div>
-    
 
       <!--AQUÍ APARECE EL MENSAJE FINAL (GANAR O PERDER)-->
-      <div id="mensajeFinal">
+      <div id="parte4">
         <p id="textoFinal"></p>
         <input id="botonFinal" class="button" type="button" value="Volver a jugar">
       </div>
@@ -83,17 +82,18 @@
       <form id="formularioRegistro">
         <label for="name">ELIGE UN NOMBRE DE USUARIO</label><br>
         <input class="inputName" id="inputRegistroName" name="name" type="text"><br><br>
-        <label for="password">ELIGE UNA CONTRASEÑA</label><br>
+        <label for="password">ELIGE UNA CONTRASEÑA (min 4 carácteres)</label><br>
         <input class="inputPassword" id="inputRegistroPassword" name="password" type="password"><br><br>
         <label for="repeatPassword">REPITE LA CONTRASEÑA</label><br>
         <input class="inputRepeatPassword" id="inputRegistroPasswordRepeat" name="repeatPassword" type="password"><br>
+        <div id="erroresFormularioRegistro"></div>
         <input class="botonEntrar" id="botonEntrarRegistro" type="button" value="registrar">
       </form>
 
     </div>
     <footer>
       <!--MONEDAS-->
-      <p id="monedas"></p>
+      <p id="monedas"><img src='./img/coin.png' alt='moneda'> x 0</p>
     </footer>
   </div>
   <script src="index.js"></script>
