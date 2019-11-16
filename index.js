@@ -3,6 +3,9 @@
 //////////////////////////////////////////////////////////////////////////////
 //elementos del dom
 
+//div container
+var divContainer = document.getElementById("container");
+
 //menú
 var nombreUsuario = document.getElementById("nombreUsuario");
 var botonEntrarLogin = document.getElementById("botonEntrarLogin");
@@ -488,6 +491,7 @@ function mostrarElemento(elemento) {
 function crearArray(tema) {
   switch (tema) {
     case "cine":
+      divContainer.style.backgroundImage="url('./img/cine.jpg')";
       return (animales = [
         "vaca",
         "cabra",
@@ -499,6 +503,7 @@ function crearArray(tema) {
       ]);
       break;
     case "musica":
+        divContainer.style.backgroundImage="url('./img/musica.jpg')";
       return (alimentos = [
         "arroz",
         "pasta",
@@ -509,7 +514,8 @@ function crearArray(tema) {
         "queso"
       ]);
       break;
-    case "deporte":
+    case "alimentos":
+        divContainer.style.backgroundImage="url('./img/alimentos.jpg')";
       return (ciudades = [
         "madrid",
         "valencia",
@@ -520,6 +526,30 @@ function crearArray(tema) {
         "santander"
       ]);
       break;
+      case "animales":
+          divContainer.style.backgroundImage="url('./img/animales.jpg')";
+        return (ciudades = [
+          "madrid",
+          "valencia",
+          "alicante",
+          "castellon",
+          "xativa",
+          "chella",
+          "santander"
+        ]);
+        break;
+        case "ciudades":
+            divContainer.style.backgroundImage="url('./img/ciudades.jpg')";
+          return (ciudades = [
+            "madrid",
+            "valencia",
+            "alicante",
+            "castellon",
+            "xativa",
+            "chella",
+            "santander"
+          ]);
+          break;
   }
 }
 ////////////////////////////////////////////////////////////////////FIN FUNCIONES GENÉRICAS/////////////////////////////////////////

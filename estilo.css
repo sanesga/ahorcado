@@ -183,55 +183,71 @@ header {
   font-size: 40px;
 }
 
-
 /*ELEMENTOS DEL MENÚ*/
-nav{
+nav {
   width: 100%;
   height: 40%;
 }
-li a{
-  text-decoration:none;
+li a {
+  text-decoration: none;
   color: white;
 }
-li{
-display: inline;
-padding: 20px;
-background-color: #384A62;
-border-radius: 10px;
-text-align: center;
-box-shadow: 20px 20px 30px -20px black;
-border-top: 2px solid white;
-border-left: 2px solid white;
-line-height: 70px;
+li {
+  display: inline;
+  padding: 20px;
+  background-color: #384a62;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 20px 20px 30px -20px black;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  line-height: 70px;
 
-margin-left: 20px;
+  margin-left: 20px;
 }
-#enlaceLogin{
-  font-size:15px;
+#enlaceLogin {
+  font-size: 15px;
 }
 #enlaceRegistro {
-  font-size:20px;
+  font-size: 20px;
 }
 #nombreUsuario {
-  font-size:28px;
+  font-size: 28px;
   color: rgb(192, 58, 34);
   cursor: default;
 }
-#logOut{
-  font-size:15px;
+#logOut {
+  font-size: 15px;
 }
-li{
-  cursor:pointer;
+li {
+  cursor: pointer;
 }
-
 /*ELEMENTOS DEL MENÚ*/
-
-#erroresFormularioRegistro{
+#erroresFormularioRegistro {
   color: rgb(192, 58, 34);
   font-size: 25px;
 }
-
-#parte3{
+#parte3 {
   height: 100%;
   width: 100%;
+}
+#cine {
+  background-image: url("./img/cine.jpg");
+  color: white;
+}
+#musica {
+  background-image: url("./img/musica.jpg");
+  color: white;
+}
+#alimentos {
+  background-image: url("./img/alimentos.jpg");
+  color: white;
+}
+#animales {
+  background-image: url("./img/animales.jpg");
+  color: white;
+}
+#ciudades {
+  background-image: url("./img/ciudades.jpg");
+  color: white;
 }
