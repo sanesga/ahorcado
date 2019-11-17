@@ -27,7 +27,6 @@ var formularioRegistro = document.getElementById("formularioRegistro");
 var parte1 = document.getElementById("parte1");
 var botonJugar = document.getElementById("botonJugar");
 
-
 //parte 2 -- botones categorías
 var parte2 = document.getElementById("parte2");
 var botonesCategoria = document.getElementsByClassName("categoria");
@@ -60,6 +59,7 @@ var pista = false;
 var usuarios = new Array();
 var usuarioActual = new Object();
 var usuarioExiste = false;
+var espacios = new Number();
 
 //listeners
 botonJugar.addEventListener("click", jugar);
@@ -217,12 +217,12 @@ function login() {
   let loginName = inputLoginName.value;
   let loginPassword = inputLoginPassword.value;
 
-  console.log(loginName);
-  console.log(loginPassword);
+  //console.log(loginName);
+  //console.log(loginPassword);
 
   //verificamos que el usuario esté registrado en la base de datos
- 
-  console.log(usuarios);
+
+  //console.log(usuarios);
   for (usuario of usuarios) {
     // console.log(usuario.name)
     if (loginName == usuario.name && loginPassword == usuario.password) {
@@ -277,7 +277,7 @@ function mostrarUsuarioLogueado() {
   pMonedas.innerHTML =
     "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
 }
-function borrarLogin(){
+function borrarLogin() {
   localStorage.removeItem("usuario");
 }
 
@@ -304,28 +304,69 @@ function iniciarJuego() {
   let tema = this.id;
 
   //elegimos array según tema
-  var arrayElegido = crearArray(tema);
+  var arrayTema = crearArray(tema);
 
-  //sacamos un numero aleatorio para elegir palabra del array
-  var numero = Math.floor(Math.random() * arrayElegido.length);
+  let repetido = false;
 
-  //obtenemos la palabra
-  palabra = arrayElegido[numero];
-  //ayuda para el desarrollo
-  console.log(palabra);
+  do {
+    //mientras el número esté repetido, se irán sacando números
+    //sacamos un numero aleatorio para elegir palabra del array
+    let numero = numeroAleatorio();
+    //console.log(numero);
+    //creamos un array para almacenar los números que van saliendo y comprobar que no se repitan
+    let arrayNumeros = new Array();
+    //verificamos si está repetido, devuelve true si está repetido, false si no.
+    repetido = comprobarNumeroRepetido(numero, arrayNumeros);
+    //si el número no ha salido
+    if (!repetido) {
+      //guardamos el número en el array
+      arrayNumeros.push(numero);
+      //obtenemos la palabra
+      palabra = arrayTema[numero];
+      //ponemos a 0 el contador de espacios en blanco
+      espacios = 0;
+      //guardamos el número de espacios en blanco que contiene para que no se cuenten cuando vayamos acertando letras
+      contarEspaciosBlanco();
+      console.log("espacio en blanco" + espacios);
+      //sumamos los espacios al contador de letras para que no se cuenten al acertar las letras
+      contadorLetras += espacios;
+      console.log(contadorLetras);
+      //ayuda para el desarrollo
+      console.log(palabra);
+      //ocultamos las categorias
+      ocultarElemento(parte2);
+      //mostramos los huecos de la palabra en pantalla
+      mostrarHuecos(palabra);
+      pMensajes.innerHTML = "Introduce una letra y presiona enter";
+      //mostramos el input donde introducir las letras
+      parte3.style.display = "inline-block";
+      //ponemos el foco
+      inputLetra.focus();
 
-  //ocultamos las categorias
-  ocultarElemento(parte2);
-  //mostramos los huecos de la palabra en pantalla
-  mostrarHuecos(palabra);
-  pMensajes.innerHTML = "Introduce una letra y presiona enter";
-  //mostramos el input donde introducir las letras
-  parte3.style.display = "inline-block";
-  //ponemos el foco
-  inputLetra.focus();
-
-  //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
-  //seguimos a partir del método verificarLetra
+      //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
+      //seguimos a partir del método verificarLetra
+    }
+  } while (repetido);
+}
+function contarEspaciosBlanco() {
+  for (var i = 0; i < palabra.length; i++) {
+    if (palabra.charAt(i) == " ") {
+      espacios++;
+    }
+  }
+}
+function numeroAleatorio() {
+  return (numero = Math.floor(Math.random() * 10));
+}
+function comprobarNumeroRepetido(numero, arrayNumeros) {
+  for (numeroArray in arrayNumeros) {
+    if (numero == numeroArray) {
+      //si el número ya ha salido
+      return true;
+    }
+  }
+  //si el número no ha salido
+  return false;
 }
 
 function verificarLetra(event) {
@@ -346,8 +387,9 @@ function verificarLetra(event) {
         pintarLetra(letra, i);
         //contador para mostrar el número de letras encontradas en el mensaje
         numeroLetras++;
+        //contador para contar las letras que llevamos acertadas
         contadorLetras++;
-
+        console.log(contadorLetras);
         //sumamos 5 monedas por letra acertada
         monedas += 5;
         //guardamos las monedas en el usuario
@@ -369,7 +411,8 @@ function verificarLetra(event) {
       }
     }
     //imprimimos las monedas en el p
-    pMonedas.innerHTML = "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+    pMonedas.innerHTML =
+      "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
     if (numeroLetras == 1) {
       pMensajes.innerHTML =
         "La letra se encuentra " + numeroLetras + " vez en la palabra";
@@ -407,7 +450,9 @@ function verificarLetra(event) {
 
 function darPista() {
   for (var i = 0; i < spans.length; i++) {
-    if (spans[i].innerHTML == "" && pista == false) {
+    if (pista == false && spans[i].style.border!=0) {
+      console.log("spans que estan vacios ");
+      console.log("la pista es " + palabra[i]);
       //este span estará vacío, insertamos la pista
       spans[i].style.border = "none"; //quitamos el borde que delimita el hueco
       spans[i].innerHTML = palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
@@ -439,10 +484,10 @@ function transicion() {
   // transition:opacity 0.5s linear;
 }
 
-function guardarMonedas(){
+function guardarMonedas() {
   //guardamos las monedas del usuario en el local storage (así si hacemos reload sin querer o log out, ya estarán guardadas)
- 
- //guardamos en el array de usuarios
+
+  //guardamos en el array de usuarios
   for (usuario of usuarios) {
     if (usuarioActual.name == usuario.name) {
       //la clave primaria del objecto usuario es el name, solo podemos modificar las monedas
@@ -461,6 +506,11 @@ function mostrarHuecos(palabra) {
     var span = document.createElement("span");
     span.setAttribute("class", "letras");
     pPalabra.appendChild(span);
+
+    //si el hueco corresponde a un espacio en blanco, quitamos el borde
+    if (palabra[i] == " ") {
+      span.style.border = "none";
+    }
   }
 }
 
@@ -490,66 +540,81 @@ function mostrarElemento(elemento) {
 
 function crearArray(tema) {
   switch (tema) {
-    case "cine":
-      divContainer.style.backgroundImage="url('./img/cine.jpg')";
+    case "peliculas":
+      divContainer.style.backgroundImage = "url('./img/cine.jpg')";
       return (animales = [
-        "vaca",
-        "cabra",
-        "oveja",
-        "burro",
-        "leon",
-        "ballena",
-        "gallo"
+        "piratas del caribe",
+        "matrix",
+        "avatar",
+        "harry potter",
+        "titanic",
+        "el resplandor",
+        "el lobo de wall street",
+        "el jocker",
+        "it",
+        "jurassic park"
       ]);
       break;
-    case "musica":
-        divContainer.style.backgroundImage="url('./img/musica.jpg')";
+    case "cantantes":
+      divContainer.style.backgroundImage = "url('./img/musica.jpg')";
       return (alimentos = [
-        "arroz",
-        "pasta",
-        "leche",
-        "pan",
-        "azucar",
-        "pollo",
-        "queso"
+        "rosalia",
+        "miley cyrus",
+        "rihanna",
+        "shakira",
+        "lady gaga",
+        "dua lipa",
+        "bad bunny",
+        "ed sheeran",
+        "katy perry",
+        "thalia"
       ]);
       break;
     case "alimentos":
-        divContainer.style.backgroundImage="url('./img/alimentos.jpg')";
+      divContainer.style.backgroundImage = "url('./img/alimentos.jpg')";
+      return (ciudades = [
+        "arroz",
+        "pasta",
+        "azucar",
+        "pan",
+        "leche",
+        "cereales",
+        "patata",
+        "chocolate",
+        "cafe",
+        "lechuga"
+      ]);
+      break;
+    case "animales":
+      divContainer.style.backgroundImage = "url('./img/animales.jpg')";
+      return (ciudades = [
+        "jirafa",
+        "oso",
+        "elefante",
+        "cocodrilo",
+        "gato",
+        "pez",
+        "canario",
+        "perro",
+        "rata",
+        "lombriz"
+      ]);
+      break;
+    case "ciudades":
+      divContainer.style.backgroundImage = "url('./img/ciudades.jpg')";
       return (ciudades = [
         "madrid",
         "valencia",
         "alicante",
         "castellon",
-        "xativa",
-        "chella",
-        "santander"
+        "barcelona",
+        "cordoba",
+        "santander",
+        "sevilla",
+        "granada",
+        "bilbao"
       ]);
       break;
-      case "animales":
-          divContainer.style.backgroundImage="url('./img/animales.jpg')";
-        return (ciudades = [
-          "madrid",
-          "valencia",
-          "alicante",
-          "castellon",
-          "xativa",
-          "chella",
-          "santander"
-        ]);
-        break;
-        case "ciudades":
-            divContainer.style.backgroundImage="url('./img/ciudades.jpg')";
-          return (ciudades = [
-            "madrid",
-            "valencia",
-            "alicante",
-            "castellon",
-            "xativa",
-            "chella",
-            "santander"
-          ]);
-          break;
   }
 }
 ////////////////////////////////////////////////////////////////////FIN FUNCIONES GENÉRICAS/////////////////////////////////////////

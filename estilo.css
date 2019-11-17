@@ -110,13 +110,13 @@ img {
 .letras {
   /*formato de cada letra*/
   display: inline-block;
-  width: 100px;
+  width: 70px;
   height: 30px;
   border: none;
   border-bottom: 9px solid white;
   margin-right: 20px;
   text-align: center;
-  font-size: 100px;
+  font-size: 70px;
   color: white;
 }
 #textoFinal {
@@ -231,11 +231,11 @@ li {
   height: 100%;
   width: 100%;
 }
-#cine {
+#peliculas {
   background-image: url("./img/cine.jpg");
   color: white;
 }
-#musica {
+#cantantes {
   background-image: url("./img/musica.jpg");
   color: white;
 }
