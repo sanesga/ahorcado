@@ -13,7 +13,6 @@ var nombreUsuario = document.getElementById("nombreUsuario");
 var botonEntrarLogin = document.getElementById("botonEntrarLogin");
 var botonEntrarRegistro = document.getElementById("botonEntrarRegistro");
 var logOut = document.getElementById("logOut");
-var liLogin = document.getElementById("liLogin");
 var liRegistro = document.getElementById("liRegistro");
 var inputLoginName = document.getElementById("inputLoginName");
 var inputLoginPassword = document.getElementById("inputLoginPassword");
@@ -25,9 +24,11 @@ var inputRegistroPasswordRepeat = document.getElementById(
 var formularioLogin = document.getElementById("formularioLogin");
 var formularioRegistro = document.getElementById("formularioRegistro");
 
+//intro
+var btnLogin = document.getElementById("btnLogin");
+
 //parte 1 --botones clásico y aventura
 var parte1 = document.getElementById("parte1");
-var botonJugar = document.getElementById("botonJugar");
 
 //parte 2 -- botones categorías
 var parte2 = document.getElementById("parte2");
@@ -49,6 +50,7 @@ var pTextoFinal = document.getElementById("textoFinal");
 var botonFinal = document.getElementById("botonFinal");
 
 //footer -- monedas
+var footer = document.getElementsByTagName("footer");
 var pMonedas = document.getElementById("monedas");
 
 //variables
@@ -64,7 +66,6 @@ var usuarioExiste = false;
 var espacios = new Number();
 
 //listeners
-botonJugar.addEventListener("click", jugar);
 botonFinal.addEventListener("click", reiniciarJuego);
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", verificarLetra);
@@ -72,7 +73,7 @@ for (boton of botonesCategoria) {
   boton.addEventListener("click", iniciarJuego);
 }
 imgAyuda.addEventListener("click", darPista);
-liLogin.addEventListener("click", mostrarLogin);
+btnLogin.addEventListener("click", mostrarLogin);
 liRegistro.addEventListener("click", mostrarRegistro);
 botonEntrarLogin.addEventListener("click", login);
 botonEntrarRegistro.addEventListener("click", registrarse);
@@ -82,13 +83,13 @@ logOut.addEventListener("click", cerrarSesion);
 
 /////////////////////////////////////////////////////////////////////////////
 
-//ocultamos todos los elementos menos los botones elegir tipo de juego
-
+//ocultamos todos los elementos menos el botón de login
 ocultarElemento(formularioLogin);
 ocultarElemento(formularioRegistro);
 ocultarElemento(parte2);
 ocultarElemento(parte3);
 ocultarElemento(parte4);
+ocultarElemento(footer[0]);
 
 //obtenemos los datos del local storage
 recuperarUsuarios();
@@ -96,15 +97,9 @@ recuperarUsuarios();
 //recuperamos el último usuario logueado que no salió de la sesión
 recuperarLogin();
 
-//************************************************************FUNCIONES******************************************************/
 
-function jugar() {
-  //entramos aquí al hacer click al boton juego clásico
-  //escondemos los botones de tipo de juego
-  ocultarElemento(parte1);
-  //mostramos los botones de categorías
-  mostrarElemento(parte2);
-}
+
+//************************************************************FUNCIONES******************************************************/
 
 function reiniciarJuego() {
   //obtenemos todos los spans y los borramos
@@ -147,42 +142,64 @@ function registrarse() {
   let registroNombre = inputRegistroName.value;
   let registroPassword = inputRegistroPassword.value;
   let registroPassword2 = inputRegistroPasswordRepeat.value;
-  //expresión regular que verifica que la contraseña contenga mínimo 4 carácteres, entre ellos números o letras y solo los carácteres especiales _ y -.
-  const regex = /^([a-zA-Z0-9_-]){4,}$/;
-  //si las contraseñas coinciden
-  if (registroPassword == registroPassword2) {
-    if (registroPassword.match(regex)) {
-      //creamos una clase usuario
-      let usuario = new Object();
-      usuario.name = registroNombre;
-      usuario.password = registroPassword;
-      usuario.monedas = 0;
 
-      //añadimos el usuario al array de usuarios
-      usuarios.push(usuario);
-      //guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
-      guardarUsuarios();
-      //una vez registrado, vamos a la pantalla de login
+  //primero verificamos que el nombre no esté ya en uso
+  let nombreValido = validarNombreUsuario(registroNombre);
 
-      ocultarElemento(formularioRegistro);
-      ocultarElemento(formularioLogin);
-      ocultarElemento(parte2);
-      ocultarElemento(parte3);
-      ocultarElemento(parte4);
+  if (nombreValido) {
+    //si el nombre es único
+    //expresión regular que verifica que la contraseña contenga mínimo 4 carácteres, entre ellos números o letras y solo los carácteres especiales _ y -.
+    const regex = /^([a-zA-Z0-9_-]){4,}$/;
+    //si las contraseñas coinciden
+    if (registroPassword == registroPassword2) {
+      if (registroPassword.match(regex)) {
+        //creamos una clase usuario
+        let usuario = new Object();
+        usuario.name = registroNombre;
+        usuario.password = registroPassword;
+        usuario.monedas = 0;
+        usuario.nivel=0;
 
-      mostrarElemento(parte1);
+        //añadimos el usuario al array de usuarios
+        usuarios.push(usuario);
+        //guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
+        guardarUsuarios();
+        //una vez registrado, vamos a la pantalla de login
+
+        ocultarElemento(formularioRegistro);
+        ocultarElemento(formularioLogin);
+        ocultarElemento(parte2);
+        ocultarElemento(parte3);
+        ocultarElemento(parte4);
+
+        mostrarElemento(parte1);
+      } else {
+        erroresFormularioRegistro.innerHTML =
+          "La constraseña debe tener mínimo 4 carácteres (números y/o letras) y solo los carácteres especiales - y _";
+        inputRegistroPassword.focus();
+      }
     } else {
-      erroresFormularioRegistro.innerHTML =
-        "La constraseña debe tener mínimo 4 carácteres (números y/o letras) y solo los carácteres especiales - y _";
+      erroresFormularioRegistro = document.getElementById(
+        "erroresFormularioRegistro"
+      );
+      erroresFormularioRegistro.innerHTML = "Las contraseñas no coinciden";
       inputRegistroPassword.focus();
     }
   } else {
-    erroresFormularioRegistro = document.getElementById(
-      "erroresFormularioRegistro"
-    );
-    erroresFormularioRegistro.innerHTML = "Las contraseñas no coinciden";
-    inputRegistroPassword.focus();
+    erroresFormularioRegistro.innerHTML =
+      "Este nombre de usuario ya está en uso, elige otro";
   }
+}
+function validarNombreUsuario(registroNombre) {
+  //recorremos el array usuarios
+  for (u of usuarios) {
+    //si el nombre de algún usuario es igual al que hemos elegido, mostramos un mensaje de error
+    if (registroNombre == u.name) {
+      return false;
+    }
+  }
+  //si el nombre es único
+  return true;
 }
 
 function guardarUsuarios() {
@@ -232,23 +249,21 @@ function login() {
       mostrarUsuarioLogueado();
       liRegistro.removeEventListener("click", mostrarRegistro);
       liRegistro.style.backgroundColor = "#abbcd3";
-      liLogin.removeEventListener("click", mostrarLogin);
-      liLogin.style.backgroundColor = "#abbcd3";
       guardarLogin();
       existeUsuario = true;
     }
   }
   if (!existeUsuario) {
     alert("El usuario no existe");
-  }
-
-  //volvemos a la pantalla principal
+  }else{
+  //mostramos las categorías
   ocultarElemento(formularioRegistro);
   ocultarElemento(formularioLogin);
-  ocultarElemento(parte2);
+  ocultarElemento(parte1);
   ocultarElemento(parte3);
   ocultarElemento(parte4);
-  mostrarElemento(parte1);
+  mostrarElemento(parte2);
+  }
 }
 
 function guardarLogin() {
@@ -267,6 +282,11 @@ function recuperarLogin() {
     if (json != null) {
       usuarioActual = JSON.parse(json);
       mostrarUsuarioLogueado();
+      //mostramos las categorías
+      ocultarElemento(parte1);
+      mostrarElemento(parte2);
+      liRegistro.removeEventListener("click", mostrarRegistro);
+      liRegistro.style.backgroundColor = "#abbcd3";
     }
   } else {
     alert(
@@ -288,13 +308,10 @@ function borrarLogin() {
 function cerrarSesion() {
   //quitamos el nombre del usuario y el logout del menú
   nombreUsuario.innerHTML = "usuario";
-  pMonedas.innerHTML = "<img src='./img/coin.png' alt='moneda'> x 0";
   //activamos los botones login y registro del menú
   liRegistro.addEventListener("click", mostrarRegistro);
   liRegistro.style.backgroundColor = "#384A62";
-  liLogin.addEventListener("click", mostrarLogin);
-  liLogin.style.backgroundColor = "#384A62";
-
+  mostrarElemento(parte1);
   borrarLogin();
 }
 //---------------------------------------------------------FIN MENÚ------------------------------------------------------------------------------
@@ -314,7 +331,7 @@ function iniciarJuego() {
     //mientras el número esté repetido, se irán sacando números
     //sacamos un numero aleatorio para elegir palabra del array
     let numero = numeroAleatorio();
-    //console.log(numero);
+    console.log(numero);
     //creamos un array para almacenar los números que van saliendo y comprobar que no se repitan
     let arrayNumeros = new Array();
     //verificamos si está repetido, devuelve true si está repetido, false si no.
@@ -388,16 +405,16 @@ function verificarLetra(event) {
 
       //nos recorremos la palabra
       for (var i = 0; i < palabra.length; i++) {
-       // console.log("texto del span" +spans[i].innerText);
+        // console.log("texto del span" +spans[i].innerText);
         //si la letra pulsada está en ella y no se ha pintado ya, si se repite la letra, se cuenta como fallo.
-        if (letra == palabra.charAt(i) && spans[i].innerHTML=="") {
+        if (letra == palabra.charAt(i) && spans[i].innerHTML == "") {
           //pintamos la letra
           pintarLetra(letra, i);
           //contador para mostrar el número de letras encontradas en el mensaje
           numeroLetras++;
           //contador para contar las letras que llevamos acertadas
           contadorLetras++;
-         // console.log(contadorLetras);
+          // console.log(contadorLetras);
           //sumamos 5 monedas por letra acertada
           monedas += 5;
           //guardamos las monedas en el usuario
@@ -414,6 +431,7 @@ function verificarLetra(event) {
               ocultarElemento(parte3);
               pTextoFinal.innerHTML = "Has ganado";
               contadorLetras = 0;
+              contadorFallos = 0;
             }, 3000);
           }
         }
@@ -453,14 +471,14 @@ function verificarLetra(event) {
           }, 3000);
         }
       }
-    }//si la letra es un espacio en blanco
+    } //si la letra es un espacio en blanco
   }
 }
 
 function darPista() {
   for (var i = 0; i < spans.length; i++) {
     if (!pista && palabra[i] != " " && spans[i].innerHTML == "") {
-     // console.log("la pista es " + palabra[i]);
+      // console.log("la pista es " + palabra[i]);
       //este span estará vacío, insertamos la pista
       spans[i].style.border = "none"; //quitamos el borde que delimita el hueco
       spans[i].innerHTML = palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
