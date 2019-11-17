@@ -228,6 +228,9 @@ li {
   color: rgb(192, 58, 34);
   font-size: 25px;
 }
+#parte2{
+  text-align: right;
+}
 #parte3 {
   height: 100%;
   width: 100%;
@@ -256,4 +259,12 @@ li {
   display: inline;
   font-size: 30px;
   color: white;
+}
+.price{
+  font-size: 20px;
+  color: #eac28f;
+}
+.price > img{
+  height: 30px;
+  width: 30px;
 }

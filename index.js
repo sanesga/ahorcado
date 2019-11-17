@@ -33,14 +33,14 @@ var parte1 = document.getElementById("parte1");
 //parte 2 -- botones categorías
 var parte2 = document.getElementById("parte2");
 var botonesCategoria = document.getElementsByClassName("categoria");
-var iconosCheck = document.getElementsByClassName("fa-check");
+var prices = document.getElementsByClassName("price");
 
 //parte 3 -- palabra, dibujo, ayuda, huecos, inputletra
 var parte3 = document.getElementById("parte3");
 var pMensajes = document.getElementById("pMensajes");
 var pPalabra = document.getElementById("pPalabra");
 var inputLetra = document.getElementById("letra");
-var spans = document.getElementsByTagName("span");
+var spans = document.getElementsByClassName("letras");
 var divDibujo = document.getElementById("dibujo");
 var pFallos = document.getElementById("fallos");
 var imgAyuda = document.getElementById("help");
@@ -65,16 +65,19 @@ var usuarios = new Array();
 var usuarioActual = new Object();
 var usuarioExiste = false;
 var espacios = new Number();
-  //iniciamos el contador de palabras
-  var posicionPalabra = new Number();
+//iniciamos el contador de palabras
+var posicionPalabra = new Number();
+
 
 //listeners
 botonFinal.addEventListener("click", reiniciarJuego);
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", verificarLetra);
+
 for (boton of botonesCategoria) {
   boton.addEventListener("click", iniciarJuego);
 }
+
 imgAyuda.addEventListener("click", darPista);
 btnLogin.addEventListener("click", mostrarLogin);
 liRegistro.addEventListener("click", mostrarRegistro);
@@ -86,6 +89,11 @@ logOut.addEventListener("click", cerrarSesion);
 
 /////////////////////////////////////////////////////////////////////////////
 
+//bloqueamos todas las categorías menos la primera
+for (var i = 1; i < botonesCategoria.length; i++) {
+  botonesCategoria[i].style.color = "#99a2b6";
+}
+
 //ocultamos todos los elementos menos el botón de login
 ocultarElemento(formularioLogin);
 ocultarElemento(formularioRegistro);
@@ -93,17 +101,12 @@ ocultarElemento(parte2);
 ocultarElemento(parte3);
 ocultarElemento(parte4);
 ocultarElemento(footer[0]);
-for(icono of iconosCheck){
-  ocultarElemento(icono);
-}
 
 //obtenemos los datos del local storage
 recuperarUsuarios();
 
 //recuperamos el último usuario logueado que no salió de la sesión. Si no hay contacto logueado, se muestra el botón de login
 recuperarLogin();
-
-
 
 //************************************************************FUNCIONES******************************************************/
 
@@ -164,8 +167,8 @@ function registrarse() {
         usuario.name = registroNombre;
         usuario.password = registroPassword;
         usuario.monedas = 0;
-        usuario.nivel=0;
-        usuario.palabra=0;
+        usuario.palabra = 0;
+        usuario.categoria=new Array();
 
         //añadimos el usuario al array de usuarios
         usuarios.push(usuario);
@@ -258,19 +261,18 @@ function login() {
       liRegistro.style.backgroundColor = "#abbcd3";
       guardarLogin();
       existeUsuario = true;
+      //mostramos las categorías
+      ocultarElemento(formularioRegistro);
+      ocultarElemento(formularioLogin);
+      ocultarElemento(parte1);
+      ocultarElemento(parte3);
+      ocultarElemento(parte4);
+      mostrarElemento(parte2);
+      mostrarElemento(footer[0]);
     }
   }
   if (!existeUsuario) {
     alert("El usuario no existe");
-  }else{
-  //mostramos las categorías
-  ocultarElemento(formularioRegistro);
-  ocultarElemento(formularioLogin);
-  ocultarElemento(parte1);
-  ocultarElemento(parte3);
-  ocultarElemento(parte4);
-  mostrarElemento(parte2);
-  mostrarElemento(footer[0]);
   }
 }
 
@@ -296,11 +298,7 @@ function recuperarLogin() {
       mostrarElemento(footer[0]);
       liRegistro.removeEventListener("click", mostrarRegistro);
       liRegistro.style.backgroundColor = "#abbcd3";
-
-      //marcamos por el nivel que va
-     mostrarCheckNiveles();
-
-    }//si no hay usuario logueado, se muestra por defecto el botón login. Siempre que se accede al juego, habrá un usuario logueado.
+    } //si no hay usuario logueado, se muestra por defecto el botón login. Siempre que se accede al juego, habrá un usuario logueado.
   } else {
     alert(
       "tu navegador no soporta el almacenamiento de datos, prueba con otro."
@@ -311,13 +309,15 @@ function mostrarUsuarioLogueado() {
   nombreUsuario.innerHTML = usuarioActual.name;
   pMonedas.innerHTML =
     "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+  //leemos las categorias que tiene compradas el usuario
+
+  for (var i = 0; i < usuarioActual.categoria.length; i++) {
+    ocultarElemento(prices[i]);
+  }
 }
 function borrarLogin() {
   localStorage.removeItem("usuario");
 }
-
-///////////////////////////////////////////////////////////FIN LOGIN////////////////////////////////////////////////////////////////////////////
-
 function cerrarSesion() {
   //quitamos el nombre del usuario y el logout del menú
   nombreUsuario.innerHTML = "usuario";
@@ -328,6 +328,9 @@ function cerrarSesion() {
   ocultarElemento(parte2);
   borrarLogin();
 }
+
+///////////////////////////////////////////////////////////FIN LOGIN////////////////////////////////////////////////////////////////////////////
+
 //---------------------------------------------------------FIN MENÚ------------------------------------------------------------------------------
 
 function iniciarJuego() {
@@ -336,43 +339,138 @@ function iniciarJuego() {
   //recogemos el tema del select
   let tema = this.id;
 
+  let comprado = verificarSiComprado(tema);
+
+  //si la categoría no está comprada, la intentamos comprar
+  if (!comprado) {
+    let pagado = comprar(tema);
+
+    if (pagado) {
+      jugar(tema);
+    } else {
+      alert(
+        "No tienes suficientes monedas para desbloquear el nivel. Sigue jugando para ganar más monedas."
+      );
+    }
+  } else {
+    //si ya está comprada
+    jugar(tema);
+  }
+}
+
+function jugar(tema) {
   //elegimos array según tema
   var arrayTema = crearArray(tema);
-
-  //console.log(arrayTema);
-
   //obtenemos la palabra
- // console.log("posicion palabra usuario actual"+usuarioActual.palabra);
   palabra = arrayTema[usuarioActual.palabra];
   //ayuda para el desarrollo
   console.log(palabra);
-      //ponemos a 0 el contador de espacios en blanco
-      espacios = 0;
-      //guardamos el número de espacios en blanco que contiene para que no se cuenten cuando vayamos acertando letras
-      contarEspaciosBlanco();
-      //console.log("espacio en blanco" + espacios);
-      //sumamos los espacios al contador de letras para que no se cuenten al acertar las letras
-      contadorLetras += espacios;
-      //console.log(contadorLetras);
-    
-     
-      //ocultamos las categorias
-      ocultarElemento(parte2);
-      //mostramos los huecos de la palabra en pantalla
-      mostrarHuecos(palabra);
-      pMensajes.innerHTML = "Introduce una letra y presiona enter";
-      //mostramos el input donde introducir las letras
-      parte3.style.display = "inline-block";
-      //ponemos el foco
-      inputLetra.focus();
+  //ponemos a 0 el contador de espacios en blanco
+  espacios = 0;
+  //guardamos el número de espacios en blanco que contiene para que no se cuenten cuando vayamos acertando letras
+  contarEspaciosBlanco();
+  //sumamos los espacios al contador de letras para que no se cuenten al acertar las letras
+  contadorLetras += espacios;
 
-      //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
-      //seguimos a partir del método verificarLetra
+  //ocultamos las categorias
+  ocultarElemento(parte2);
+  //mostramos los huecos de la palabra en pantalla
+  mostrarHuecos(palabra);
+  pMensajes.innerHTML = "Introduce una letra y presiona enter";
+  //mostramos el input donde introducir las letras
+  parte3.style.display = "inline-block";
+  //ponemos el foco
+  inputLetra.focus();
+
+  //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
+  //seguimos a partir del método verificarLetra
+}
+function verificarSiComprado(tema) {
+  var posicion = new Number();
+
+  switch (tema) {
+    case "peliculas":
+      posicion = 0;
+      return true;
+      break;
+    case "cantantes":
+      posicion = 1;
+      break;
+    case "animales":
+      posicion = 2;
+      break;
+    case "alimentos":
+      posicion = 3;
+      break;
+    case "ciudades":
+      posicion = 4;
+      break;
+  }
+  //recorremos las categorias compradas
+  for (c of usuarioActual.categoria) {
+    //si la categoria a la que hemos hecho click, se encuentra en el array de categorías compradas
+    if (c == posicion) {
+      //devolvemos true
+      return true;
     }
-  
+  }
+  //si no está comoprada, devolvemos false
+  return false;
+}
+function comprar(tema) {
+  var credito = usuarioActual.monedas;
+
+  switch (tema) {
+    case "peliculas":
+      return true;
+      break;
+    case "cantantes":
+      if (credito >= 50) {
+        //le restamos las monedas que se ha gastado
+        usuarioActual.monedas -= 50;
+        //quitamos el precio
+        ocultarElemento(prices[0]);
+        //guardamos que la categoría está comprada
+        usuarioActual.categoria.push(1);
+        guardarUsuario();
+        return true;
+      }
+      break;
+    case "animales":
+      if (credito >= 80) {
+        //le restamos las monedas que se ha gastado
+        usuarioActual.monedas -= 80;
+        ocultarElemento(prices[1]);
+        usuarioActual.categoria.push(2);
+        guardarUsuario();
+        return true;
+      }
+      break;
+    case "alimentos":
+      if (credito >= 400) {
+        //le restamos las monedas que se ha gastado
+        usuarioActual.monedas -= 400;
+        ocultarElemento(prices[1]);
+        usuarioActual.categoria.push(3);
+        guardarUsuario();
+        return true;
+      }
+      break;
+    case "ciudades":
+      if (credito >= 500) {
+        //le restamos las monedas que se ha gastado
+        usuarioActual.monedas -= 500;
+        ocultarElemento(prices[1]);
+        usuarioActual.categoria.push(4);
+        guardarUsuario();
+        return true;
+      }
+      break;
+  }
+  return false;
+}
 
 function contarEspaciosBlanco() {
-  
   for (var i = 0; i < palabra.length; i++) {
     if (palabra.charAt(i) == " ") {
       espacios++;
@@ -380,7 +478,8 @@ function contarEspaciosBlanco() {
   }
 }
 
-function verificarLetra(event) { //accedemos aquí tras introducir una letra y pulsar intro
+function verificarLetra(event) {
+  //accedemos aquí tras introducir una letra y pulsar intro
   //si el código de la tecla es el del intro
   if (event.keyCode == 13) {
     //recogemos la letra del input
@@ -393,11 +492,8 @@ function verificarLetra(event) { //accedemos aquí tras introducir una letra y p
       //verificamos si la letra se encuentra en la palabra
       let numeroLetras = 0;
 
-      //console.log(letra);
-
       //nos recorremos la palabra
       for (var i = 0; i < palabra.length; i++) {
-        // console.log("texto del span" +spans[i].innerText);
         //si la letra pulsada está en ella y no se ha pintado ya, si se repite la letra, se cuenta como fallo.
 
         if (letra == palabra.charAt(i) && spans[i].innerHTML == "") {
@@ -430,14 +526,10 @@ function verificarLetra(event) { //accedemos aquí tras introducir una letra y p
               //guardamos el usuario en el local storage con la posición de la palabra actualizada
 
               //si se han terminado las palabras
-              if(usuarioActual.palabra==3){
-                   //marcamos el nivel como finalizado (aunque se puede volver a jugar)
-                //subimos de nivel
-                  usuarioActual.nivel++;
-                  mostrarCheckNiveles();
-                  //reiniciamos el contador palabras
-                  usuarioActual.palabra=0;
-                  guardarUsuario();
+              if (usuarioActual.palabra == 3) {
+                //reiniciamos el contador palabras
+                usuarioActual.palabra = 0;
+                guardarUsuario();
               }
               guardarUsuario();
             }, 3000);
@@ -481,12 +573,6 @@ function verificarLetra(event) { //accedemos aquí tras introducir una letra y p
       }
     } //si la letra es un espacio en blanco
   }
-}
-function mostrarCheckNiveles(){
-  console.log("entra a mostrarNiveles");
-for (var i=0; i< usuarioActual.nivel; i++){
-  iconosCheck[i].style.display="inline";
-}
 }
 
 function darPista() {
@@ -532,8 +618,8 @@ function guardarUsuario() {
     if (usuarioActual.name == usuario.name) {
       //la clave primaria del objecto usuario es el name, solo podemos modificar las monedas
       usuario.monedas = usuarioActual.monedas;
-      usuario.palabra= usuarioActual.palabra;
-      usuario.nivel = usuarioActual.nivel;
+      usuario.palabra = usuarioActual.palabra;
+      usuario.categoria = usuarioActual.categoria;
     }
   }
   guardarUsuarios();
