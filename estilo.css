@@ -40,6 +40,7 @@ body {
   box-shadow: 20px 20px 30px -20px black;
   font-size: 40px;
   background-color: #99a2b6;
+  display: inline-block;
 }
 #container {
   background-image: url(./img/background.jpg);
@@ -249,5 +250,10 @@ li {
 }
 #ciudades {
   background-image: url("./img/ciudades.jpg");
+  color: white;
+}
+.fa-check {
+  display: inline;
+  font-size: 30px;
   color: white;
 }
