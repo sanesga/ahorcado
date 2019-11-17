@@ -1,5 +1,7 @@
 //no utilizamos el window.onload ya que cargamos el fichero javascript al final del documento html, de manera que al ejecutarse, la página ya está totalmente cargada
 
+//ABRIR LA CONSOLA PARA VER LA PALABRA
+
 //////////////////////////////////////////////////////////////////////////////
 //elementos del dom
 
@@ -327,10 +329,10 @@ function iniciarJuego() {
       espacios = 0;
       //guardamos el número de espacios en blanco que contiene para que no se cuenten cuando vayamos acertando letras
       contarEspaciosBlanco();
-      console.log("espacio en blanco" + espacios);
+      //console.log("espacio en blanco" + espacios);
       //sumamos los espacios al contador de letras para que no se cuenten al acertar las letras
       contadorLetras += espacios;
-      console.log(contadorLetras);
+      //console.log(contadorLetras);
       //ayuda para el desarrollo
       console.log(palabra);
       //ocultamos las categorias
@@ -374,85 +376,91 @@ function verificarLetra(event) {
   if (event.keyCode == 13) {
     //recogemos la letra del input
     let texto = inputLetra.value;
-    //pasamos la letra a minúscula por si no lo estuviera
-    letra = texto.toLowerCase();
-    //verificamos si la letra se encuentra en la palabra
-    let numeroLetras = 0;
 
-    //nos recorremos la palabra
-    for (var i = 0; i < palabra.length; i++) {
-      //si la letra pulsada está en ella
-      if (letra == palabra.charAt(i)) {
-        //pintamos la letra
-        pintarLetra(letra, i);
-        //contador para mostrar el número de letras encontradas en el mensaje
-        numeroLetras++;
-        //contador para contar las letras que llevamos acertadas
-        contadorLetras++;
-        console.log(contadorLetras);
-        //sumamos 5 monedas por letra acertada
-        monedas += 5;
-        //guardamos las monedas en el usuario
-        usuarioActual.monedas = monedas;
+    //si la letra no es un espacio en blanco, procedemos
+    if (texto != " ") {
+      //pasamos la letra a minúscula por si no lo estuviera
+      letra = texto.toLowerCase();
+      //verificamos si la letra se encuentra en la palabra
+      let numeroLetras = 0;
 
-        //guardamos las monedas del usuario en el localStorage
-        guardarMonedas();
+      //console.log(letra);
 
-        if (contadorLetras == palabra.length) {
+      //nos recorremos la palabra
+      for (var i = 0; i < palabra.length; i++) {
+       // console.log("texto del span" +spans[i].innerText);
+        //si la letra pulsada está en ella y no se ha pintado ya, si se repite la letra, se cuenta como fallo.
+        if (letra == palabra.charAt(i) && spans[i].innerHTML=="") {
+          //pintamos la letra
+          pintarLetra(letra, i);
+          //contador para mostrar el número de letras encontradas en el mensaje
+          numeroLetras++;
+          //contador para contar las letras que llevamos acertadas
+          contadorLetras++;
+         // console.log(contadorLetras);
+          //sumamos 5 monedas por letra acertada
+          monedas += 5;
+          //guardamos las monedas en el usuario
+          usuarioActual.monedas = monedas;
+
+          //guardamos las monedas del usuario en el localStorage
+          guardarMonedas();
+
+          if (contadorLetras == palabra.length) {
+            inputLetra.disabled = true;
+            setTimeout(function() {
+              //si tenemos 10 fallos, se acaba el juego
+              mostrarElemento(parte4);
+              ocultarElemento(parte3);
+              pTextoFinal.innerHTML = "Has ganado";
+              contadorLetras = 0;
+            }, 3000);
+          }
+        }
+      }
+      //imprimimos las monedas en el p
+      pMonedas.innerHTML =
+        "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+      if (numeroLetras == 1) {
+        pMensajes.innerHTML =
+          "La letra se encuentra " + numeroLetras + " vez en la palabra";
+      } else if (numeroLetras > 1) {
+        pMensajes.innerHTML =
+          "La letra se encuentra " + numeroLetras + " veces en la palabra";
+      }
+      if (numeroLetras == 0) {
+        //si la letra no está
+        pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
+        inputLetra.value = "";
+        inputLetra.focus();
+        parte3.style.display = "inline-block";
+        //divDibujo.addEventListener("change", transicion);
+        divDibujo.style.backgroundImage =
+          "url('./img/fallo" + contadorFallos + ".png')";
+        contadorFallos++;
+
+        pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
+
+        if (contadorFallos == 10) {
           inputLetra.disabled = true;
           setTimeout(function() {
             //si tenemos 10 fallos, se acaba el juego
-            mostrarElemento(parte4);
             ocultarElemento(parte3);
-            pTextoFinal.innerHTML = "Has ganado";
+            mostrarElemento(parte4);
+            pTextoFinal.innerHTML = "Has perdido";
             contadorLetras = 0;
+            spans = [];
           }, 3000);
         }
       }
-    }
-    //imprimimos las monedas en el p
-    pMonedas.innerHTML =
-      "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
-    if (numeroLetras == 1) {
-      pMensajes.innerHTML =
-        "La letra se encuentra " + numeroLetras + " vez en la palabra";
-    } else if (numeroLetras > 1) {
-      pMensajes.innerHTML =
-        "La letra se encuentra " + numeroLetras + " veces en la palabra";
-    }
-    if (numeroLetras == 0) {
-      //si la letra no está
-      pMensajes.innerHTML = "Esta letra no se encuentra en la palabra";
-      inputLetra.value = "";
-      inputLetra.focus();
-      parte3.style.display = "inline-block";
-      //divDibujo.addEventListener("change", transicion);
-      divDibujo.style.backgroundImage =
-        "url('./img/fallo" + contadorFallos + ".png')";
-      contadorFallos++;
-
-      pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
-
-      if (contadorFallos == 10) {
-        inputLetra.disabled = true;
-        setTimeout(function() {
-          //si tenemos 10 fallos, se acaba el juego
-          ocultarElemento(parte3);
-          mostrarElemento(parte4);
-          pTextoFinal.innerHTML = "Has perdido";
-          contadorLetras = 0;
-          spans = [];
-        }, 3000);
-      }
-    }
+    }//si la letra es un espacio en blanco
   }
 }
 
 function darPista() {
   for (var i = 0; i < spans.length; i++) {
-    if (pista == false && spans[i].style.border!=0) {
-      console.log("spans que estan vacios ");
-      console.log("la pista es " + palabra[i]);
+    if (!pista && palabra[i] != " " && spans[i].innerHTML == "") {
+     // console.log("la pista es " + palabra[i]);
       //este span estará vacío, insertamos la pista
       spans[i].style.border = "none"; //quitamos el borde que delimita el hueco
       spans[i].innerHTML = palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
