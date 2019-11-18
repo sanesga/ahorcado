@@ -162,64 +162,61 @@ function registrarse() {
   let registroPassword = inputRegistroPassword.value;
   let registroPassword2 = inputRegistroPasswordRepeat.value;
 
-  
   //si el nombre no está vacío
-  if(registroNombre!=""){
+  if (registroNombre != "") {
+    //verificamos que el nombre no esté en uso
+    let nombreValido = validarNombreUsuario(registroNombre);
 
-  //verificamos que el nombre no esté en uso
-  let nombreValido = validarNombreUsuario(registroNombre);
+    //si el nombre es único
+    if (nombreValido) {
+      //expresión regular que verifica que la contraseña contenga mínimo 4 carácteres, entre ellos números o letras y solo los carácteres especiales _ y -.
+      const regex = /^([a-zA-Z0-9_-]){4,}$/;
 
-  //si el nombre es único
-  if (nombreValido) {
-    //expresión regular que verifica que la contraseña contenga mínimo 4 carácteres, entre ellos números o letras y solo los carácteres especiales _ y -.
-    const regex = /^([a-zA-Z0-9_-]){4,}$/;
+      //si las contraseñas coinciden
+      if (registroPassword == registroPassword2) {
+        // y coinciden con el patrón
+        if (registroPassword.match(regex)) {
+          //limpiamos el formulario registro
+          inputRegistroName.value = "";
+          inputRegistroPassword.value = "";
+          inputRegistroPasswordRepeat.value = "";
+          //creamos una clase usuario
+          let usuario = new Object();
+          usuario.name = registroNombre;
+          usuario.password = registroPassword;
+          usuario.monedas = 0;
+          usuario.palabra = 0;
+          usuario.categoria = new Array();
 
-    //si las contraseñas coinciden
-    if (registroPassword == registroPassword2) {
-      // y coinciden con el patrón
-      if (registroPassword.match(regex)) {
-        //limpiamos el formulario registro
-        inputRegistroName.value="";
-        inputRegistroPassword.value="";
-        inputRegistroPasswordRepeat.value="";
-        //creamos una clase usuario
-        let usuario = new Object();
-        usuario.name = registroNombre;
-        usuario.password = registroPassword;
-        usuario.monedas = 0;
-        usuario.palabra = 0;
-        usuario.categoria = new Array();
+          //añadimos el usuario al array de usuarios
+          usuarios.push(usuario);
 
-        //añadimos el usuario al array de usuarios
-        usuarios.push(usuario);
+          //lo guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
+          guardarUsuarios();
 
-        //lo guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
-        guardarUsuarios();
+          //una vez registrado, vamos a la pantalla de login
+          mostrarParte1();
 
-        //una vez registrado, vamos a la pantalla de login
-        mostrarParte1();
-
-        //ERRORES (ponemos el foco en el input de error para facilitar el cambio)
+          //ERRORES (ponemos el foco en el input de error para facilitar el cambio)
+        } else {
+          erroresFormularioRegistro.innerHTML =
+            "La constraseña debe tener mínimo 4 carácteres (números y/o letras) y solo los carácteres especiales - y _";
+          inputRegistroPassword.focus();
+        }
       } else {
-        erroresFormularioRegistro.innerHTML =
-          "La constraseña debe tener mínimo 4 carácteres (números y/o letras) y solo los carácteres especiales - y _";
+        erroresFormularioRegistro.innerHTML = "Las contraseñas no coinciden";
         inputRegistroPassword.focus();
       }
     } else {
-      erroresFormularioRegistro.innerHTML = "Las contraseñas no coinciden";
-      inputRegistroPassword.focus();
+      erroresFormularioRegistro.innerHTML =
+        "Este nombre de usuario ya está en uso, elige otro";
+      inputRegistroName.focus();
     }
   } else {
     erroresFormularioRegistro.innerHTML =
-      "Este nombre de usuario ya está en uso, elige otro";
+      "Debes introducir un nombre de usuario";
     inputRegistroName.focus();
   }
-  }else{
-    erroresFormularioRegistro.innerHTML =
-    "Debes introducir un nombre de usuario";
-  inputRegistroName.focus();
-  }
-
 }
 //comprueba que el nombre de usuario sera único (clave primaria)
 function validarNombreUsuario(registroNombre) {
@@ -268,10 +265,9 @@ function login() {
   for (usuario of usuarios) {
     //si el nombre y la contraseña introducidos corresponden con el nombre y la contraseña de algún usuario de la bd
     if (loginName == usuario.name && loginPassword == usuario.password) {
-
       //limpiamos el formulario de login
-      inputLoginName.value="";
-      inputLoginPassword.value="";
+      inputLoginName.value = "";
+      inputLoginPassword.value = "";
       //se ha encontrado usuario
       existeUsuario = true;
 
@@ -565,6 +561,9 @@ function comprar(tema) {
       if (credito >= 50) {
         //le restamos las monedas que ha gastado
         usuarioActual.monedas -= 50;
+        //imprimimos las monedas
+        pMonedas.innerHTML =
+          "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         //quitamos el precio
         ocultarElemento(prices[0]);
         //color blanco del título de la categoría
@@ -578,6 +577,9 @@ function comprar(tema) {
     case "animales":
       if (credito >= 100) {
         usuarioActual.monedas -= 100;
+         //imprimimos las monedas
+         pMonedas.innerHTML =
+         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[1]);
         botonesCategoria[2].style.color = "white";
         usuarioActual.categoria.push(2);
@@ -588,6 +590,9 @@ function comprar(tema) {
     case "alimentos":
       if (credito >= 150) {
         usuarioActual.monedas -= 150;
+         //imprimimos las monedas
+         pMonedas.innerHTML =
+         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[2]);
         botonesCategoria[3].style.color = "white";
         usuarioActual.categoria.push(3);
@@ -598,6 +603,9 @@ function comprar(tema) {
     case "ciudades":
       if (credito >= 200) {
         usuarioActual.monedas -= 200;
+         //imprimimos las monedas
+         pMonedas.innerHTML =
+         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[3]);
         botonesCategoria[4].style.color = "white";
         usuarioActual.categoria.push(4);
@@ -712,14 +720,14 @@ function reiniciarJuego() {
   divDibujo.style.backgroundImage = "url('')";
 }
 
-function resetearCategorias(){
+function resetearCategorias() {
   //cambiamos el color del título de las categorías
-  for(var i=1; i<botonesCategoria.length;i++){
-    botonesCategoria[i].style.color="#99a2b6"
+  for (var i = 1; i < botonesCategoria.length; i++) {
+    botonesCategoria[i].style.color = "#99a2b6";
   }
   //mostramos todos los precios
-  for (p of prices){
-    p.style.display="inline";
+  for (p of prices) {
+    p.style.display = "inline";
   }
 }
 
@@ -869,7 +877,7 @@ function mostrarParte2() {
   mostrarElemento(parte2);
   ocultarElemento(parte3);
   ocultarElemento(parte4);
-  ocultarElemento(footer[0]);
+  mostrarElemento(footer[0]);
 }
 function mostrarParte3() {
   ocultarElemento(formularioLogin);
@@ -878,7 +886,7 @@ function mostrarParte3() {
   ocultarElemento(parte2);
   mostrarFormularioLogin(parte3);
   ocultarElemento(parte4);
-  ocultarElemento(footer[0]);
+  mostrarElemento(footer[0]);
 }
 function mostrarParte4() {
   ocultarElemento(formularioLogin);
@@ -887,7 +895,7 @@ function mostrarParte4() {
   ocultarElemento(parte2);
   ocultarElemento(parte3);
   mostrarElemento(parte4);
-  ocultarElemento(footer[0]);
+  mostrarElemento(footer[0]);
 }
 function mostrarFooter() {
   ocultarElemento(formularioLogin);

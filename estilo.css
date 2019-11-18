@@ -17,6 +17,7 @@ body {
   height: 100vh;
   text-align: center;
   overflow: hidden;
+  background-color: #99a2b6;
 }
 .botonEntrar {
   margin-top: 40px;
@@ -90,13 +91,15 @@ body {
 }
 #formularioLogin {
   font-size: 50px;
+  color: white;
 }
 #formularioRegistro {
   font-size: 40px;
+  color: white;
 }
 header {
   width: 100%;
-  height: 35%;
+  height: 30%;
 }
 h1 {
   font-size: 200px;
