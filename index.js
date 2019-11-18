@@ -59,7 +59,6 @@ var pMonedas = document.getElementById("monedas");
 var letra = new String();
 var palabra = new String();
 var contadorFallos = 0;
-var monedas = 0;
 var contadorLetras = 0;
 var pista = false;
 var usuarios = new Array();
@@ -439,9 +438,7 @@ function verificarLetra(event) {
           //contador para contar las letras que llevamos acertadas
           contadorLetras++;
           //sumamos 5 monedas por letra acertada
-          monedas += 5;
-          //guardamos las monedas en el usuario
-          usuarioActual.monedas = monedas;
+          usuarioActual.monedas+=5;
           //guardamos el usuario en local storage con las monedas actualizadas
           guardarUsuario();
 
