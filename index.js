@@ -577,9 +577,9 @@ function comprar(tema) {
     case "animales":
       if (credito >= 100) {
         usuarioActual.monedas -= 100;
-         //imprimimos las monedas
-         pMonedas.innerHTML =
-         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+        //imprimimos las monedas
+        pMonedas.innerHTML =
+          "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[1]);
         botonesCategoria[2].style.color = "white";
         usuarioActual.categoria.push(2);
@@ -590,9 +590,9 @@ function comprar(tema) {
     case "alimentos":
       if (credito >= 150) {
         usuarioActual.monedas -= 150;
-         //imprimimos las monedas
-         pMonedas.innerHTML =
-         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+        //imprimimos las monedas
+        pMonedas.innerHTML =
+          "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[2]);
         botonesCategoria[3].style.color = "white";
         usuarioActual.categoria.push(3);
@@ -603,9 +603,9 @@ function comprar(tema) {
     case "ciudades":
       if (credito >= 200) {
         usuarioActual.monedas -= 200;
-         //imprimimos las monedas
-         pMonedas.innerHTML =
-         "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
+        //imprimimos las monedas
+        pMonedas.innerHTML =
+          "<img src='./img/coin.png' alt='moneda'> x " + usuarioActual.monedas;
         ocultarElemento(prices[3]);
         botonesCategoria[4].style.color = "white";
         usuarioActual.categoria.push(4);
