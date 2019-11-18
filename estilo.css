@@ -1,3 +1,4 @@
+/*REGLAS ORDENADAS ALFABÉTICAMENTE*/
 * {
   font-family: celtic;
   margin: 0;
@@ -7,11 +8,24 @@
   font-family: celtic;
   src: url(./font/celtic.ttf);
 }
+#ayuda {
+  margin-top: 10px;
+  text-align: left;
+}
 body {
   width: 100vw;
   height: 100vh;
   text-align: center;
   overflow: hidden;
+}
+.botonEntrar {
+  margin-top: 40px;
+  height: 100px;
+  width: 300px;
+  font-size: 45px;
+  border-radius: 20px;
+  background-color: #99a2b6;
+  box-shadow: 20px 20px 30px -20px black;
 }
 #botonFinal {
   margin-top: 40px;
@@ -22,6 +36,14 @@ body {
   font-size: 40px;
   box-shadow: 20px 20px 30px -20px black;
 }
+#botonLogin {
+  width: 120px;
+  height: 70px;
+  border-radius: 10px;
+  font-size: 30px;
+  background-color: #99a2b6;
+  box-shadow: 20px 20px 30px -20px black;
+}
 .button {
   height: 200px;
   width: 200px;
@@ -30,17 +52,6 @@ body {
   margin: 10px;
   font-size: 40px;
   box-shadow: 20px 20px 30px -20px black;
-}
-.categoria {
-  width: 500px;
-  height: 70px;
-  border-radius: 20px;
-  display: block;
-  margin-bottom: 20px;
-  box-shadow: 20px 20px 30px -20px black;
-  font-size: 40px;
-  background-color: #99a2b6;
-  display: inline-block;
 }
 #container {
   background-image: url(./img/background.jpg);
@@ -61,25 +72,15 @@ body {
   opacity: 1;
   transition: "opacity 0.5s linear";
   background-color: white;
-  /* opacity: 1;
-	animation-name: fadeInOpacity;
-	animation-timing-function: ease-in;
-	animation-duration: 3s; */
 }
-
-/* @keyframes fadeInOpacity {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-} */
-
 #divPalabra {
   display: inline-block;
   margin: 55px 0 0 0;
   width: 67%;
+}
+#erroresFormularioRegistro {
+  color: rgb(192, 58, 34);
+  font-size: 25px;
 }
 #fallos {
   margin-top: 10px;
@@ -87,9 +88,31 @@ body {
   font-size: 30px;
   color: rgb(192, 58, 34);
 }
+#formularioLogin {
+  font-size: 50px;
+}
+#formularioRegistro {
+  font-size: 40px;
+}
+header {
+  width: 100%;
+  height: 35%;
+}
 h1 {
   font-size: 200px;
   color: white;
+}
+.inputName,
+.inputPassword,
+.inputRepeatPassword {
+  border: none;
+  height: 40px;
+  width: 500px;
+  background-color: #99a2b6;
+  color: black;
+  text-align: center;
+  font-size: 30px;
+  border-radius: 10px;
 }
 img {
   width: 60px;
@@ -104,10 +127,6 @@ img {
   font-size: 100px;
   text-align: center;
 }
-
-#letra:focus {
-  outline: 0px;
-}
 .letras {
   /*formato de cada letra*/
   display: inline-block;
@@ -115,15 +134,13 @@ img {
   height: 30px;
   border: none;
   border-bottom: 9px solid white;
-  margin: 36px 20px 0 0 ;
+  margin: 36px 20px 0 0;
   text-align: center;
   font-size: 60px;
   color: white;
-
 }
-#textoFinal {
-  font-size: 70px;
-  color: white;
+#letra:focus {
+  outline: 0px;
 }
 #monedas {
   color: #eac28f;
@@ -136,64 +153,25 @@ img {
   align-items: center;
   justify-content: center;
 }
+#parte2 {
+  text-align: right;
+}
+#parte3 {
+  height: 100%;
+  width: 100%;
+}
 #pMensajes {
   color: white;
   font-size: 40px;
   margin-top: 50px;
 }
-#ayuda {
-  margin-top: 10px;
-  text-align: left;
-}
-#botonLogin {
-  width: 120px;
-  height: 70px;
-  border-radius: 10px;
-  font-size: 30px;
-  background-color: #99a2b6;
-  box-shadow: 20px 20px 30px -20px black;
-}
-header {
-  width: 100%;
-  height: 35%;
-}
-#formularioLogin {
-  font-size: 50px;
-}
-.inputName,
-.inputPassword,
-.inputRepeatPassword {
-  border: none;
-  height: 40px;
-  width: 500px;
-  background-color: #99a2b6;
-  color: black;
-  text-align: center;
-  font-size: 30px;
-  border-radius: 10px;
-}
-.botonEntrar {
-  margin-top: 40px;
-  height: 100px;
-  width: 300px;
-  font-size: 45px;
-  border-radius: 20px;
-  background-color: #99a2b6;
-  box-shadow: 20px 20px 30px -20px black;
-}
-#formularioRegistro {
-  font-size: 40px;
-}
-
-/*ELEMENTOS DEL MENÚ*/
-nav {
-  width: 100%;
-  height: 40%;
-}
-li a {
-  text-decoration: none;
+#textoFinal {
+  font-size: 70px;
   color: white;
 }
+
+
+/*ELEMENTOS DEL MENÚ*/
 li {
   display: inline;
   padding: 20px;
@@ -204,68 +182,62 @@ li {
   border-top: 2px solid white;
   border-left: 2px solid white;
   line-height: 70px;
-
   margin-left: 20px;
+  cursor: pointer;
 }
-#enlaceLogin {
+li a {
+  text-decoration: none;
+  color: white;
+}
+#logOut {
   font-size: 15px;
 }
-#enlaceRegistro {
-  font-size: 20px;
+nav {
+  width: 100%;
+  height: 40%;
 }
 #nombreUsuario {
   font-size: 28px;
   color: rgb(192, 58, 34);
   cursor: default;
 }
-#logOut {
-  font-size: 15px;
-}
-li {
-  cursor: pointer;
-}
 /*ELEMENTOS DEL MENÚ*/
-#erroresFormularioRegistro {
-  color: rgb(192, 58, 34);
-  font-size: 25px;
+
+
+/*BOTONES CATEGORÍAS*/
+#alimentos {
+  background-image: url("./img/alimentos.jpg");
 }
-#parte2{
-  text-align: right;
+#animales {
+  background-image: url("./img/animales.jpg");
 }
-#parte3 {
-  height: 100%;
-  width: 100%;
+#cantantes {
+  background-image: url("./img/musica.jpg");
+}
+#ciudades {
+  background-image: url("./img/ciudades.jpg");
+}
+.categoria {
+  width: 500px;
+  height: 70px;
+  border-radius: 20px;
+  display: block;
+  margin-bottom: 20px;
+  box-shadow: 20px 20px 30px -20px black;
+  font-size: 40px;
+  display: inline-block;
+  color: #99a2b6;
 }
 #peliculas {
   background-image: url("./img/cine.jpg");
   color: white;
 }
-#cantantes {
-  background-image: url("./img/musica.jpg");
-  color: white;
-}
-#alimentos {
-  background-image: url("./img/alimentos.jpg");
-  color: white;
-}
-#animales {
-  background-image: url("./img/animales.jpg");
-  color: white;
-}
-#ciudades {
-  background-image: url("./img/ciudades.jpg");
-  color: white;
-}
-.fa-check {
-  display: inline;
-  font-size: 30px;
-  color: white;
-}
-.price{
+.price {
   font-size: 20px;
   color: #eac28f;
 }
-.price > img{
+.price > img {
   height: 30px;
   width: 30px;
 }
+/*BOTONES CATEGORÍAS*/
