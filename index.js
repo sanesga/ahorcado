@@ -1,11 +1,13 @@
 //no utilizamos el window.onload ya que cargamos el fichero javascript al final del documento html, de manera que al ejecutarse, la página ya está totalmente cargada
+//para evitar hacer varias páginas, la maquetación es en un html y se van mostrando y ocultando elementos
 
 //ABRIR LA CONSOLA PARA VER LA PALABRA
 
 //////////////////////////////////////////////////////////////////////////////
-//elementos del dom
 
-//div container
+//ELEMENTOS DEL DOM
+
+//div que engloba el body
 var divContainer = document.getElementById("container");
 
 //menú
@@ -25,13 +27,11 @@ var formularioLogin = document.getElementById("formularioLogin");
 var formularioRegistro = document.getElementById("formularioRegistro");
 var liHome = document.getElementById("liHome");
 
-//intro
-var btnLogin = document.getElementById("btnLogin");
-
 //parte 1 --botón login
 var parte1 = document.getElementById("parte1");
+var btnLogin = document.getElementById("btnLogin");
 
-//parte 2 -- botones categorías
+//parte 2 -- botones categorías y sus precios
 var parte2 = document.getElementById("parte2");
 var botonesCategoria = document.getElementsByClassName("categoria");
 var prices = document.getElementsByClassName("price");
@@ -46,7 +46,7 @@ var divDibujo = document.getElementById("dibujo");
 var pFallos = document.getElementById("fallos");
 var imgAyuda = document.getElementById("help");
 
-//parte 4 -- mensaje final
+//parte 4 -- mensaje final (ganar o perder) y botón reiniciar juego
 var parte3 = document.getElementById("parte3");
 var pTextoFinal = document.getElementById("textoFinal");
 var botonFinal = document.getElementById("botonFinal");
@@ -66,34 +66,25 @@ var usuarios = new Array();
 var usuarioActual = new Object();
 var usuarioExiste = false;
 var espacios = new Number();
-//iniciamos el contador de palabras
 var posicionPalabra = new Number();
 
 //listeners
 botonFinal.addEventListener("click", reiniciarJuego);
 //evento al presionar la tecla enter
 inputLetra.addEventListener("keypress", verificarLetra);
-
-for (boton of botonesCategoria) {
-  boton.addEventListener("click", iniciarJuego);
-}
-
 imgAyuda.addEventListener("click", darPista);
 btnLogin.addEventListener("click", mostrarLogin);
 liRegistro.addEventListener("click", mostrarRegistro);
 botonEntrarLogin.addEventListener("click", login);
 botonEntrarRegistro.addEventListener("click", registrarse);
 liHome.addEventListener("click", irAHome);
-
-//cuando hacemos click en el botón de log out, cerramos sesión (eliminamos el nombre y el número de monedas de la pantalla);
 logOut.addEventListener("click", cerrarSesion);
-
+for (boton of botonesCategoria) {
+  boton.addEventListener("click", iniciarJuego);
+}
 /////////////////////////////////////////////////////////////////////////////
 
-//bloqueamos todas las categorías menos la primera
-for (var i = 1; i < botonesCategoria.length; i++) {
-  botonesCategoria[i].style.color = "#99a2b6";
-}
+//INICIO DEL CÓDIGO
 
 //ocultamos todos los elementos menos el botón de login
 ocultarElemento(formularioLogin);
@@ -106,90 +97,119 @@ ocultarElemento(footer[0]);
 //obtenemos los datos del local storage
 recuperarUsuarios();
 
-//recuperamos el último usuario logueado que no salió de la sesión. Si no hay contacto logueado, se muestra el botón de login
+//recuperamos el último usuario logueado que no salió de la sesión. Si no hay contacto logueado, se muestra el botón de login.
 recuperarLogin();
 
 //************************************************************FUNCIONES******************************************************/
 
+//--------------------------------------------MENÚ-------------------------------------------------
+//al hacer click en el botón home del menú
 function irAHome() {
+  //si no hay usuario logueado, se muestra el login
   if (usuarioActual == null) {
     ocultarElemento(formularioLogin);
     ocultarElemento(formularioRegistro);
     ocultarElemento(parte2);
     ocultarElemento(parte3);
     ocultarElemento(parte4);
+
     mostrarElemento(parte1);
+
+    //si hay usuario logueado, se muestran las categorías y se reinician todos los campos
   } else {
-    contadorFallos = 0;
-    pFallos.innerHTML = "FALLO 0 / 10";
-    eliminarHuecos();
-    contadorLetras = 0;
-    divDibujo.style.backgroundImage = "url('')";
     ocultarElemento(formularioLogin);
     ocultarElemento(formularioRegistro);
     ocultarElemento(parte1);
     ocultarElemento(parte3);
     ocultarElemento(parte4);
+
     mostrarElemento(parte2);
-     //volvemos a activar la ayuda
-  imgAyuda.setAttribute("src", "./img/help.png");
-  pista = false;
-  imgAyuda.disabled = false;
+
+    reiniciarJuego();
   }
 }
-function reiniciarJuego() {
-  //obtenemos todos los spans y los borramos
-  eliminarHuecos();
-  ocultarElemento(parte4);
-  mostrarElemento(parte2);
-  //volvemos a activar la ayuda
-  imgAyuda.setAttribute("src", "./img/help.png");
-  pista = false;
-  imgAyuda.disabled = false;
-  divDibujo.style.backgroundImage = "url('')";
-  inputLetra.disabled = false;
-}
-
-//----------------------------------------------------------------MENÚ---------------------------------------------------------
-function mostrarLogin() {
-  ocultarElemento(formularioRegistro);
-  ocultarElemento(parte1);
-  ocultarElemento(parte2);
-  ocultarElemento(parte3);
-  ocultarElemento(parte4);
-  mostrarElemento(formularioLogin);
-  inputLoginName.focus();
-}
+//al hacer click sobre el botón registro, se muestra el formulario de registro
 function mostrarRegistro() {
   ocultarElemento(formularioLogin);
   ocultarElemento(parte1);
   ocultarElemento(parte2);
   ocultarElemento(parte3);
   ocultarElemento(parte4);
+
   mostrarElemento(formularioRegistro);
+
   inputRegistroName.focus();
+}
+
+//al hacer click sobre el botón de log out, cerramos sesión
+function cerrarSesion() {
+
+  mostrarElemento(parte1);
+  ocultarElemento(parte2);
+  ocultarElemento(footer[0]);
+  ocultarElemento(parte3);
+  ocultarElemento(formularioLogin);
+  ocultarElemento(formularioRegistro);
+
+  //borramos el usuario actual
+  usuarioActual = null;
+  //quitamos el nombre del usuario y el logout del menú
+  nombreUsuario.innerHTML = "usuario";
+  //activamos los botones login y registro del menú
+  liRegistro.addEventListener("click", mostrarRegistro);
+  liRegistro.style.backgroundColor = "#384A62";
+
+  //volvemos a poner el fondo original
+  divContainer.style.backgroundImage = "url('./img/background.jpg')";
+
+  //reseteamos todos los campos
+  reiniciarJuego();
+
+  //borramos los datos de sesión del usuario del local storage
+  borrarLogin();
+}
+
+//al hacer click en el botón de login, se muestra el formulario de login
+function mostrarLogin() {
+
+  ocultarElemento(formularioRegistro);
+  ocultarElemento(parte1);
+  ocultarElemento(parte2);
+  ocultarElemento(parte3);
+  ocultarElemento(parte4);
+
+  mostrarElemento(formularioLogin);
+  //ponemos el foco en el input del nombre
+  inputLoginName.focus();
 }
 
 /////////////////////////////////////////////////////////////REGISTRO/////////////////////////////////////////////////////////////
 function registrarse() {
+
+  //elemento donde imprimimos los mensajes de error durante el registro
   var erroresFormularioRegistro = document.getElementById(
     "erroresFormularioRegistro"
   );
-  //recogemos los datos del formulario y registramos al usuario
+  //recogemos los datos del formulario
   let registroNombre = inputRegistroName.value;
   let registroPassword = inputRegistroPassword.value;
   let registroPassword2 = inputRegistroPasswordRepeat.value;
 
-  //primero verificamos que el nombre no esté ya en uso
+  //verificamos que el nombre no esté en uso
   let nombreValido = validarNombreUsuario(registroNombre);
 
+  //si el nombre es único
   if (nombreValido) {
-    //si el nombre es único
+    
     //expresión regular que verifica que la contraseña contenga mínimo 4 carácteres, entre ellos números o letras y solo los carácteres especiales _ y -.
     const regex = /^([a-zA-Z0-9_-]){4,}$/;
+
     //si las contraseñas coinciden
     if (registroPassword == registroPassword2) {
+
+      // y coinciden con el patrón
       if (registroPassword.match(regex)) {
+
         //creamos una clase usuario
         let usuario = new Object();
         usuario.name = registroNombre;
@@ -200,10 +220,11 @@ function registrarse() {
 
         //añadimos el usuario al array de usuarios
         usuarios.push(usuario);
-        //guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
-        guardarUsuarios();
-        //una vez registrado, vamos a la pantalla de login
 
+        //lo guardamos en local storage (la información no se eliminará nunca, si no la borramos nosotros)
+        guardarUsuarios();
+
+        //una vez registrado, vamos a la pantalla de login
         ocultarElemento(formularioRegistro);
         ocultarElemento(formularioLogin);
         ocultarElemento(parte2);
@@ -211,23 +232,24 @@ function registrarse() {
         ocultarElemento(parte4);
 
         mostrarElemento(parte1);
+
+        //ERRORES (ponemos el foco en el input de error para facilitar el cambio)
       } else {
         erroresFormularioRegistro.innerHTML =
           "La constraseña debe tener mínimo 4 carácteres (números y/o letras) y solo los carácteres especiales - y _";
         inputRegistroPassword.focus();
       }
     } else {
-      erroresFormularioRegistro = document.getElementById(
-        "erroresFormularioRegistro"
-      );
       erroresFormularioRegistro.innerHTML = "Las contraseñas no coinciden";
       inputRegistroPassword.focus();
     }
   } else {
     erroresFormularioRegistro.innerHTML =
       "Este nombre de usuario ya está en uso, elige otro";
+      inputRegistroName.focus();
   }
 }
+//comprueba que el nombre de usuario sera único (clave primaria)
 function validarNombreUsuario(registroNombre) {
   //recorremos el array usuarios
   for (u of usuarios) {
@@ -240,20 +262,25 @@ function validarNombreUsuario(registroNombre) {
   return true;
 }
 
+//guardamos los usuarios en el local storage
 function guardarUsuarios() {
+  //si nuestro navegador soporta el almacenamiento en el local storage
   if (typeof Storage !== "undefined") {
+    //guardamos en formato JSON
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    //si no lo admite
   } else {
     alert(
       "tu navegador no soporta el almacenamiento de datos, prueba con otro."
     );
   }
 }
+//nada más entrar a la página cargamos el array de usuarios desde el local storage para trabajar con él
 function recuperarUsuarios() {
-  //nada más entrar a la página cargamos el array de usuarios para trabajar con él
   if (typeof Storage !== "undefined") {
     let json = localStorage.getItem("usuarios");
     if (json != null) {
+      //hacemos un parse de JSON a array
       usuarios = JSON.parse(json);
     }
   } else {
@@ -264,31 +291,41 @@ function recuperarUsuarios() {
 }
 ////////////////////////////////////////////////////////FIN REGISTRO////////////////////////////////////////////////////////////////////////
 
+
+
 ///////////////////////////////////////////////////////////LOGIN////////////////////////////////////////////////////////////////////////////
+
+//entra aquí al hacer click en el botón entrar del formulario de login
 function login() {
-  //entra aquí al hacer click en el botón entrar del formulario de login
+  
   existeUsuario = false;
   ocultarElemento(parte2);
 
-  //recogemos los datos
+  //recogemos los datos del formulario
   let loginName = inputLoginName.value;
   let loginPassword = inputLoginPassword.value;
 
-  //console.log(loginName);
-  //console.log(loginPassword);
-
   //verificamos que el usuario esté registrado en la base de datos
-
-  //console.log(usuarios);
   for (usuario of usuarios) {
-    // console.log(usuario.name)
+
+   //si el nombre y la contraseña introducidos corresponden con el nombre y la contraseña de algún usuario de la bd
     if (loginName == usuario.name && loginPassword == usuario.password) {
+
+      //nos guardamos el usuario, en usuario actual para trabajar con él durante el juego y guardar los cambios
       usuarioActual = usuario;
+
+      //pintamos los datos del usuario en el juego (nombre, monedas..)
       mostrarUsuarioLogueado();
+
+      //evitamos poder hacer click a registro
       liRegistro.removeEventListener("click", mostrarRegistro);
       liRegistro.style.backgroundColor = "#abbcd3";
+
+      //guardamos el usuario como usuario logueado en la sesión
       guardarLogin();
+
       existeUsuario = true;
+
       //mostramos las categorías
       ocultarElemento(formularioRegistro);
       ocultarElemento(formularioLogin);
@@ -313,23 +350,29 @@ function guardarLogin() {
     );
   }
 }
+//al cargar la página cargamos el usuario logueado para trabajar con él (estará guardado el último usuario que se logueó y no hizo log out)
 function recuperarLogin() {
-  //nada más entrar a la página cargamos el usuario logueado para trabajar con él (estará guardado el último usuario que se logueó y no hizo log out)
+  
   if (typeof Storage !== "undefined") {
     let json = localStorage.getItem("usuario");
     if (json != null) {
       usuarioActual = JSON.parse(json);
+
       mostrarUsuarioLogueado();
+
       //mostramos las categorías
       ocultarElemento(parte1);
       mostrarElemento(parte2);
       mostrarElemento(footer[0]);
+
       liRegistro.removeEventListener("click", mostrarRegistro);
       liRegistro.style.backgroundColor = "#abbcd3";
-       //volvemos a activar la ayuda
-  imgAyuda.setAttribute("src", "./img/help.png");
-  pista = false;
-  imgAyuda.disabled = false;
+      //volvemos a activar la ayuda
+
+      imgAyuda.setAttribute("src", "./img/help.png");
+      pista = false;
+      imgAyuda.disabled = false;
+
     } //si no hay usuario logueado, se muestra por defecto el botón login. Siempre que se accede al juego, habrá un usuario logueado.
   } else {
     alert(
@@ -350,34 +393,10 @@ function mostrarUsuarioLogueado() {
 function borrarLogin() {
   localStorage.removeItem("usuario");
 }
-function cerrarSesion() {
-  //borramos el usuario actual
-  usuarioActual = null;
-  //quitamos el nombre del usuario y el logout del menú
-  nombreUsuario.innerHTML = "usuario";
-  //activamos los botones login y registro del menú
-  liRegistro.addEventListener("click", mostrarRegistro);
-  liRegistro.style.backgroundColor = "#384A62";
-  mostrarElemento(parte1);
-  ocultarElemento(parte2);
-  ocultarElemento(footer[0]);
-  ocultarElemento(parte3);
-  ocultarElemento(formularioLogin);
-  ocultarElemento(formularioRegistro);
-  divContainer.style.backgroundImage = "url('./img/background.jpg')";
-  divDibujo.style.backgroundImage = "url('')";
-  pFallos.innerHTML = "FALLO 0 / 10";
-   //volvemos a activar la ayuda
-   imgAyuda.setAttribute("src", "./img/help.png");
-   pista = false;
-   imgAyuda.disabled = false;
-   eliminarHuecos();
-  borrarLogin();
-}
 
 ///////////////////////////////////////////////////////////FIN LOGIN////////////////////////////////////////////////////////////////////////////
 
-//---------------------------------------------------------FIN MENÚ------------------------------------------------------------------------------
+//--------------------------------------FIN MENÚ-------------------------------------------------------
 
 function iniciarJuego() {
   //accedemos aquí tras pulsar un botón categoría
@@ -407,7 +426,7 @@ function iniciarJuego() {
 function jugar(tema) {
   //elegimos array según tema
   var arrayTema = crearArray(tema);
-console.log(usuarioActual.palabra);
+  console.log(usuarioActual.palabra);
   //obtenemos la palabra
   palabra = arrayTema[usuarioActual.palabra];
   //ayuda para el desarrollo
@@ -620,7 +639,6 @@ function verificarLetra(event) {
             contadorFallos = 0;
             pFallos.innerHTML = "FALLO 0 / 10";
             eliminarHuecos();
-           
           }, 3000);
         }
       }
@@ -629,11 +647,11 @@ function verificarLetra(event) {
 }
 
 function darPista() {
- // console.log("entra a dar pista");
+  // console.log("entra a dar pista");
   for (var i = 0; i < spans.length; i++) {
     if (!pista && palabra[i] != " " && spans[i].innerHTML == "") {
       var letraPista = palabra[i];
-     // console.log("pista "+pista);
+      // console.log("pista "+pista);
       pista = true; //ya hemos dado la pista
       pintarPista(letraPista);
     }
@@ -654,18 +672,17 @@ function darPista() {
     }, 3000);
   }
 }
-function pintarPista(letraPista){
- // console.log(letraPista);
-//controlamos si hay más de una letra de ese tipo
-for (var i=0; i<palabra.length;i++){
-  if(letraPista == palabra.charAt(i)){
-    spans[i].style.border = "none"; 
-    spans[i].innerHTML = letraPista.toUpperCase();
-    contadorLetras++;
+function pintarPista(letraPista) {
+  // console.log(letraPista);
+  //controlamos si hay más de una letra de ese tipo
+  for (var i = 0; i < palabra.length; i++) {
+    if (letraPista == palabra.charAt(i)) {
+      spans[i].style.border = "none";
+      spans[i].innerHTML = letraPista.toUpperCase();
+      contadorLetras++;
+    }
   }
 }
-}
-
 
 function guardarUsuario() {
   //guardamos las monedas del usuario en el local storage (así si hacemos reload sin querer o log out, ya estarán guardadas)
@@ -686,6 +703,20 @@ function guardarUsuario() {
 }
 
 /////////////////////////////////////////////FUNCIONES GENÉRICAS////////////////////////////////////
+function reiniciarJuego() {
+  //obtenemos todos los spans y los borramos
+  eliminarHuecos();
+  divDibujo.style.backgroundImage = "url('')";
+  inputLetra.disabled = false;
+  //volvemos a activar la ayuda
+  imgAyuda.setAttribute("src", "./img/help.png");
+  pista = false;
+  imgAyuda.disabled = false;
+  contadorFallos = 0;
+  pFallos.innerHTML = "FALLO 0 / 10";
+  contadorLetras = 0;
+}
+
 function mostrarHuecos(palabra) {
   for (var i = 0; i < palabra.length; i++) {
     var span = document.createElement("span");
