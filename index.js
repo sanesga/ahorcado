@@ -23,11 +23,12 @@ var inputRegistroPasswordRepeat = document.getElementById(
 );
 var formularioLogin = document.getElementById("formularioLogin");
 var formularioRegistro = document.getElementById("formularioRegistro");
+var liHome = document.getElementById("liHome");
 
 //intro
 var btnLogin = document.getElementById("btnLogin");
 
-//parte 1 --botones clásico y aventura
+//parte 1 --botón login
 var parte1 = document.getElementById("parte1");
 
 //parte 2 -- botones categorías
@@ -68,7 +69,6 @@ var espacios = new Number();
 //iniciamos el contador de palabras
 var posicionPalabra = new Number();
 
-
 //listeners
 botonFinal.addEventListener("click", reiniciarJuego);
 //evento al presionar la tecla enter
@@ -83,6 +83,7 @@ btnLogin.addEventListener("click", mostrarLogin);
 liRegistro.addEventListener("click", mostrarRegistro);
 botonEntrarLogin.addEventListener("click", login);
 botonEntrarRegistro.addEventListener("click", registrarse);
+liHome.addEventListener("click", irAHome);
 
 //cuando hacemos click en el botón de log out, cerramos sesión (eliminamos el nombre y el número de monedas de la pantalla);
 logOut.addEventListener("click", cerrarSesion);
@@ -110,6 +111,32 @@ recuperarLogin();
 
 //************************************************************FUNCIONES******************************************************/
 
+function irAHome() {
+  if (usuarioActual == null) {
+    ocultarElemento(formularioLogin);
+    ocultarElemento(formularioRegistro);
+    ocultarElemento(parte2);
+    ocultarElemento(parte3);
+    ocultarElemento(parte4);
+    mostrarElemento(parte1);
+  } else {
+    contadorFallos = 0;
+    pFallos.innerHTML = "FALLO 0 / 10";
+    eliminarHuecos();
+    contadorLetras = 0;
+    divDibujo.style.backgroundImage = "url('')";
+    ocultarElemento(formularioLogin);
+    ocultarElemento(formularioRegistro);
+    ocultarElemento(parte1);
+    ocultarElemento(parte3);
+    ocultarElemento(parte4);
+    mostrarElemento(parte2);
+     //volvemos a activar la ayuda
+  imgAyuda.setAttribute("src", "./img/help.png");
+  pista = false;
+  imgAyuda.disabled = false;
+  }
+}
 function reiniciarJuego() {
   //obtenemos todos los spans y los borramos
   eliminarHuecos();
@@ -117,6 +144,7 @@ function reiniciarJuego() {
   mostrarElemento(parte2);
   //volvemos a activar la ayuda
   imgAyuda.setAttribute("src", "./img/help.png");
+  pista = false;
   imgAyuda.disabled = false;
   divDibujo.style.backgroundImage = "url('')";
   inputLetra.disabled = false;
@@ -168,7 +196,7 @@ function registrarse() {
         usuario.password = registroPassword;
         usuario.monedas = 0;
         usuario.palabra = 0;
-        usuario.categoria=new Array();
+        usuario.categoria = new Array();
 
         //añadimos el usuario al array de usuarios
         usuarios.push(usuario);
@@ -298,6 +326,10 @@ function recuperarLogin() {
       mostrarElemento(footer[0]);
       liRegistro.removeEventListener("click", mostrarRegistro);
       liRegistro.style.backgroundColor = "#abbcd3";
+       //volvemos a activar la ayuda
+  imgAyuda.setAttribute("src", "./img/help.png");
+  pista = false;
+  imgAyuda.disabled = false;
     } //si no hay usuario logueado, se muestra por defecto el botón login. Siempre que se accede al juego, habrá un usuario logueado.
   } else {
     alert(
@@ -319,6 +351,8 @@ function borrarLogin() {
   localStorage.removeItem("usuario");
 }
 function cerrarSesion() {
+  //borramos el usuario actual
+  usuarioActual = null;
   //quitamos el nombre del usuario y el logout del menú
   nombreUsuario.innerHTML = "usuario";
   //activamos los botones login y registro del menú
@@ -326,6 +360,18 @@ function cerrarSesion() {
   liRegistro.style.backgroundColor = "#384A62";
   mostrarElemento(parte1);
   ocultarElemento(parte2);
+  ocultarElemento(footer[0]);
+  ocultarElemento(parte3);
+  ocultarElemento(formularioLogin);
+  ocultarElemento(formularioRegistro);
+  divContainer.style.backgroundImage = "url('./img/background.jpg')";
+  divDibujo.style.backgroundImage = "url('')";
+  pFallos.innerHTML = "FALLO 0 / 10";
+   //volvemos a activar la ayuda
+   imgAyuda.setAttribute("src", "./img/help.png");
+   pista = false;
+   imgAyuda.disabled = false;
+   eliminarHuecos();
   borrarLogin();
 }
 
@@ -361,6 +407,7 @@ function iniciarJuego() {
 function jugar(tema) {
   //elegimos array según tema
   var arrayTema = crearArray(tema);
+console.log(usuarioActual.palabra);
   //obtenemos la palabra
   palabra = arrayTema[usuarioActual.palabra];
   //ayuda para el desarrollo
@@ -385,6 +432,9 @@ function jugar(tema) {
   //en este momento, el jugador presiona una letra y la tecla enter y se activa el listener keypress que llamará a una función que recoge la letra
   //seguimos a partir del método verificarLetra
 }
+// function numeroAleatorio(){
+//   return Math.floor(Math.random()*10);
+// }
 function verificarSiComprado(tema) {
   var posicion = new Number();
 
@@ -437,9 +487,9 @@ function comprar(tema) {
       }
       break;
     case "animales":
-      if (credito >= 80) {
+      if (credito >= 100) {
         //le restamos las monedas que se ha gastado
-        usuarioActual.monedas -= 80;
+        usuarioActual.monedas -= 100;
         ocultarElemento(prices[1]);
         usuarioActual.categoria.push(2);
         guardarUsuario();
@@ -447,20 +497,20 @@ function comprar(tema) {
       }
       break;
     case "alimentos":
-      if (credito >= 400) {
+      if (credito >= 150) {
         //le restamos las monedas que se ha gastado
-        usuarioActual.monedas -= 400;
-        ocultarElemento(prices[1]);
+        usuarioActual.monedas -= 150;
+        ocultarElemento(prices[2]);
         usuarioActual.categoria.push(3);
         guardarUsuario();
         return true;
       }
       break;
     case "ciudades":
-      if (credito >= 500) {
+      if (credito >= 200) {
         //le restamos las monedas que se ha gastado
-        usuarioActual.monedas -= 500;
-        ocultarElemento(prices[1]);
+        usuarioActual.monedas -= 200;
+        ocultarElemento(prices[3]);
         usuarioActual.categoria.push(4);
         guardarUsuario();
         return true;
@@ -520,13 +570,14 @@ function verificarLetra(event) {
               pTextoFinal.innerHTML = "Has acertado";
               contadorLetras = 0;
               contadorFallos = 0;
+              pFallos.innerHTML = "FALLO 0 / 10";
               //incrementamos la posicion de la palabra del usuario actual
               usuarioActual.palabra++;
               guardarUsuario();
               //guardamos el usuario en el local storage con la posición de la palabra actualizada
 
               //si se han terminado las palabras
-              if (usuarioActual.palabra == 3) {
+              if (usuarioActual.palabra == 10) {
                 //reiniciamos el contador palabras
                 usuarioActual.palabra = 0;
                 guardarUsuario();
@@ -556,7 +607,6 @@ function verificarLetra(event) {
         divDibujo.style.backgroundImage =
           "url('./img/fallo" + contadorFallos + ".png')";
         contadorFallos++;
-
         pFallos.innerHTML = "FALLO " + contadorFallos + " / 10";
 
         if (contadorFallos == 10) {
@@ -567,7 +617,10 @@ function verificarLetra(event) {
             mostrarElemento(parte4);
             pTextoFinal.innerHTML = "Has fallado";
             contadorLetras = 0;
-            spans = [];
+            contadorFallos = 0;
+            pFallos.innerHTML = "FALLO 0 / 10";
+            eliminarHuecos();
+           
           }, 3000);
         }
       }
@@ -576,14 +629,13 @@ function verificarLetra(event) {
 }
 
 function darPista() {
+ // console.log("entra a dar pista");
   for (var i = 0; i < spans.length; i++) {
     if (!pista && palabra[i] != " " && spans[i].innerHTML == "") {
-      // console.log("la pista es " + palabra[i]);
-      //este span estará vacío, insertamos la pista
-      spans[i].style.border = "none"; //quitamos el borde que delimita el hueco
-      spans[i].innerHTML = palabra[i]; //la letra que falta en ese hueco está en la misma posición que la posición del span vacío
-      contadorLetras++;
+      var letraPista = palabra[i];
+     // console.log("pista "+pista);
       pista = true; //ya hemos dado la pista
+      pintarPista(letraPista);
     }
   }
   //oscurecemos el interrogante y desactivamos el click
@@ -602,13 +654,18 @@ function darPista() {
     }, 3000);
   }
 }
-
-function transicion() {
-  // divDibujo.style.opacity=1;
-  // divDibujo.style.transition="opacity 0.5s linear";
-  // opacity:1;
-  // transition:opacity 0.5s linear;
+function pintarPista(letraPista){
+ // console.log(letraPista);
+//controlamos si hay más de una letra de ese tipo
+for (var i=0; i<palabra.length;i++){
+  if(letraPista == palabra.charAt(i)){
+    spans[i].style.border = "none"; 
+    spans[i].innerHTML = letraPista.toUpperCase();
+    contadorLetras++;
+  }
 }
+}
+
 
 function guardarUsuario() {
   //guardamos las monedas del usuario en el local storage (así si hacemos reload sin querer o log out, ya estarán guardadas)
@@ -674,14 +731,14 @@ function crearArray(tema) {
       return (animales = [
         "titanic",
         "matrix",
-        "avatar"
-        // "harry potter",
-        // "titanic",
-        // "el resplandor",
-        // "el lobo de wall street",
-        // "el jocker",
-        // "it",
-        // "jurassic park"
+        "avatar",
+        "volver",
+        "kill bill",
+        "el resplandor",
+        "el lobo de wall street",
+        "el jocker",
+        "it",
+        "jurassic park"
       ]);
       break;
     case "cantantes":
@@ -689,14 +746,14 @@ function crearArray(tema) {
       return (alimentos = [
         "rosalia",
         "miley cyrus",
-        "rihanna"
-        // "shakira",
-        // "lady gaga",
-        // "dua lipa",
-        // "bad bunny",
-        // "ed sheeran",
-        // "katy perry",
-        // "thalia"
+        "rihanna",
+        "shakira",
+        "lady gaga",
+        "dua lipa",
+        "bad bunny",
+        "ed sheeran",
+        "katy perry",
+        "thalia"
       ]);
       break;
     case "alimentos":
@@ -704,14 +761,14 @@ function crearArray(tema) {
       return (ciudades = [
         "arroz",
         "pasta",
-        "azucar"
-        // "pan",
-        // "leche",
-        // "cereales",
-        // "patata",
-        // "chocolate",
-        // "cafe",
-        // "lechuga"
+        "azucar",
+        "pan",
+        "leche",
+        "cereales",
+        "patata",
+        "chocolate",
+        "cafe",
+        "lechuga"
       ]);
       break;
     case "animales":
@@ -719,14 +776,14 @@ function crearArray(tema) {
       return (ciudades = [
         "jirafa",
         "oso",
-        "elefante"
-        // "cocodrilo",
-        // "gato",
-        // "pez",
-        // "canario",
-        // "perro",
-        // "rata",
-        // "lombriz"
+        "elefante",
+        "cocodrilo",
+        "gato",
+        "pez",
+        "canario",
+        "perro",
+        "rata",
+        "lombriz"
       ]);
       break;
     case "ciudades":
@@ -734,14 +791,14 @@ function crearArray(tema) {
       return (ciudades = [
         "madrid",
         "valencia",
-        "alicante"
-        // "castellon",
-        // "barcelona",
-        // "cordoba",
-        // "santander",
-        // "sevilla",
-        // "granada",
-        // "bilbao"
+        "alicante",
+        "castellon",
+        "barcelona",
+        "cordoba",
+        "santander",
+        "sevilla",
+        "granada",
+        "bilbao"
       ]);
       break;
   }

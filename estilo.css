@@ -115,10 +115,11 @@ img {
   height: 30px;
   border: none;
   border-bottom: 9px solid white;
-  margin-right: 20px;
+  margin: 36px 20px 0 0 ;
   text-align: center;
-  font-size: 70px;
+  font-size: 60px;
   color: white;
+
 }
 #textoFinal {
   font-size: 70px;
